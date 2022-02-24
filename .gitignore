@@ -2,6 +2,7 @@
 .idea
 build/
 
+.angular/
 package-lock.json
 node_modules/
 data-test/
