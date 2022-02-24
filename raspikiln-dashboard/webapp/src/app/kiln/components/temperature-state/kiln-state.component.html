@@ -1,0 +1,20 @@
+<mat-list>
+  <mat-list-item>
+    <mat-icon>thermostat</mat-icon>
+    Temperature:
+    {{ temperature | temperatureFormat }}
+  </mat-list-item>
+  <mat-list-item>
+    <mat-icon>thermostat_auto</mat-icon>
+    Target Temperature:
+    {{ targetTemperature | temperatureFormat }}
+  </mat-list-item>
+  <mat-list-item>
+    <mat-icon>tungsten</mat-icon>
+    Kiln Hot:
+    {{ armState | titlecase }}
+  </mat-list-item>
+  <mat-list-item>
+    <app-kiln-program-stop [enabled]="armState == 'on'"></app-kiln-program-stop>
+  </mat-list-item>
+</mat-list>

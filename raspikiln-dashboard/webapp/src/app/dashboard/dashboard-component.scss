@@ -1,0 +1,30 @@
+
+.a-dashboard-grid {
+  display: flex;
+  flex-direction: row;
+  align-content: flex-start;
+}
+
+.a-dashboard-column {
+  display: flex;
+  flex-direction: column;;
+  align-content: flex-start;
+}
+
+.a-dashboard-grid-element {
+  margin: 5px 5px;
+}
+
+.a-dashboard-left-panel {
+  margin: 5px 5px;
+  width: 25vw;
+}
+
+.a-dashboard-right-panel {
+  margin: 5px 5px;
+  width: 70vw
+}
+
+.a-dashboard-tabs {
+  height: 500px;
+}

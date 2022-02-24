@@ -1,0 +1,18 @@
+<div *ngIf="kilnStatus">
+  <form class="a-control-form" [formGroup]="manualProgramForm" (submit)="submitManualProgram()">
+    <p>Current Oven Temperature: {{ kilnStatus?.temperature | temperatureFormat }}</p>
+    <div class="a-control-form-manual-controls">
+      <mat-form-field appearance="outline">
+        <mat-label>Oven Temperature</mat-label>
+        <input matInput placeholder="20.0" type="number" formControlName="temperature">
+        <mat-hint>Override Oven Temperature</mat-hint>
+        <span matSuffix>°C</span>
+      </mat-form-field>
+      <button type="submit"
+        class="a-control-form-manual-submit"
+        mat-flat-button color="warn">
+        Set
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,11 @@
+[Unit]
+Description=Raspikiln Controller
+
+[Service]
+type=simple
+Restart=always
+RestartSec=1
+ExecStart=/home/pi/raspkiln/run.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,10 @@
+<mat-tab-group>
+  <mat-tab label="Temperature">
+    <app-metrics-chart [chartOptions]="dashboardMetricOptions" [metrics]="(dashboardMetrics | async) ?? []"></app-metrics-chart>
+  </mat-tab>
+  <mat-tab label="Control">
+    <div class="a-control-form-tab">
+      <app-kiln-control-form [kilnStatus]="kilnStatus | async"></app-kiln-control-form>
+    </div>
+  </mat-tab>
+</mat-tab-group>

@@ -1,0 +1,23 @@
+http:
+  port: 8080
+kiln:
+  provider: rpi
+  sensors:
+    - name: "thermocouple-a"
+      type: temperature
+      zone: 0
+      sensor:
+        type: MAX31855
+        spi:
+          address: 0
+  switches:
+    - name: "arming-switch"
+      type: "arming-switch"
+      zones: [ 0 ]
+      digitalOutput:
+        pin: 12
+    - name: "heater-switch"
+      type: "heating-element-switch"
+      zones: [ 0 ]
+      digitalOutput:
+        pin: 22

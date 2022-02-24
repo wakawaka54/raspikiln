@@ -1,0 +1,12 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+@include mat-core();
+
+@mixin grid-theme($theme) {
+  $color: mat.get-color-config($theme);
+  $background: map.get($color, background);
+
+  .grid {
+    background: mat.get-color-from-palette($background, background);
+  }
+}

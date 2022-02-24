@@ -1,0 +1,8 @@
+.gradle
+.idea
+build/
+
+package-lock.json
+node_modules/
+data-test/
+ts/

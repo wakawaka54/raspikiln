@@ -1,0 +1,15 @@
+.a-control-form {
+
+}
+
+.a-control-form-manual-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.a-control-form-manual-submit {
+  // Account for the hint.
+  margin-bottom: 14px;
+  margin-left: 8px;
+}

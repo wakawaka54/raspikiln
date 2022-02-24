@@ -1,0 +1,17 @@
+<div *ngIf="loaded && options; else loading">
+  <div echarts [options]="options" [merge]="dynamicData" theme="dark"></div>
+  <div class="a-chart-toolbar">
+    <mat-form-field class="a-chart-toolbar-time-range">
+      <mat-label>Time Range</mat-label>
+      <mat-select [formControl]="timeRangeControl" (valueChange)="timeRangeUpdate()">
+        <mat-option [value]="1800">30 min</mat-option>
+        <mat-option [value]="7200">2 hr</mat-option>
+        <mat-option [value]="21600">6 hr</mat-option>
+        <mat-option [value]="86400">1 day</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+<ng-template #loading>
+  <mat-spinner diameter="34" strokeWidth="2"></mat-spinner>
+</ng-template>
