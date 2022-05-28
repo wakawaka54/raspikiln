@@ -3,10 +3,10 @@ package org.raspikiln.rpi
 import com.pi4j.io.spi.Spi
 import mu.KotlinLogging
 import org.raspikiln.kiln.config.MAX31855Config
-import org.raspikiln.kiln.config.ProtocolConfig
-import org.raspikiln.kiln.config.SensorConfig
+import org.raspikiln.kiln.config.sensors.SensorProtocolConfig
+import org.raspikiln.kiln.config.LegacySensorConfig
 import org.raspikiln.kiln.kilnProviderError
-import org.raspikiln.kiln.sensors.Sensor
+import org.raspikiln.kiln.legacysensors.Sensor
 import org.raspikiln.rpi.components.MAX31855
 import org.raspikiln.rpi.core.PiContext
 import org.raspikiln.rpi.core.spi
@@ -14,19 +14,19 @@ import org.raspikiln.rpi.core.spi
 private val logger = KotlinLogging.logger { }
 
 class RpiSensorProvider(private val pi4J: PiContext) {
-    fun create(sensorConfig: SensorConfig): Sensor =
+    fun create(sensorConfig: LegacySensorConfig): Sensor =
         when (sensorConfig) {
-            is SensorConfig.TemperatureSensorConfig -> sensorConfig.create()
+            is LegacySensorConfig.TemperatureSensorConfig -> sensorConfig.create()
             else -> kilnProviderError(message = "Unknown sensor config type ${sensorConfig::class}")
         }
 
-    private fun SensorConfig.TemperatureSensorConfig.create(): Sensor =
+    private fun LegacySensorConfig.TemperatureSensorConfig.create(): Sensor =
         when (val typedSensor = sensor) {
             is MAX31855Config -> MAX31855(name, location, zone, typedSensor.spi.bind(name)).print()
             else -> kilnProviderError(message = "Unknown specific sensor interface $name ${typedSensor::class}")
         }
 
-    private fun ProtocolConfig.Spi.bind(name: String) =
+    private fun SensorProtocolConfig.Spi.bind(name: String) =
         pi4J.spi {
             id(name)
             address(requireNotNull(address) { "$name address was not defined." })

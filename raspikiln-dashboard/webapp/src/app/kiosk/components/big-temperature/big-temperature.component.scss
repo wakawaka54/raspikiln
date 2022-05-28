@@ -1,0 +1,14 @@
+
+.big-temperature {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  height: 90%;
+}
+
+.big-temperature-value {
+  text-align: center;
+  font-size: 4rem;
+}

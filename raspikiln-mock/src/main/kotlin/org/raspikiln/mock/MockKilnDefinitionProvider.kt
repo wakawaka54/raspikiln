@@ -1,9 +1,9 @@
 package org.raspikiln.mock
 
-import org.raspikiln.kiln.KilnDefinition
-import org.raspikiln.kiln.KilnDefinitionProvider
+import org.raspikiln.kiln.KilnBridge
+import org.raspikiln.kiln.KilnBridgeProvider
 import org.raspikiln.kiln.config.KilnConfig
 
-class MockKilnDefinitionProvider : KilnDefinitionProvider {
-    override fun create(config: KilnConfig): KilnDefinition = MockKilnDefinition()
+class MockKilnDefinitionProvider : KilnBridgeProvider {
+    override fun create(config: KilnConfig): KilnBridge = MockKilnDefinition()
 }

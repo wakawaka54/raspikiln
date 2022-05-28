@@ -4,12 +4,9 @@ import mu.KotlinLogging
 import org.raspikiln.core.units.Temperature
 import org.raspikiln.kiln.common.atomicValue
 import org.raspikiln.kiln.programs.types.TemperatureSetpoint
-import org.raspikiln.kiln.sensors.Sensor
-import org.raspikiln.kiln.sensors.zoneTemperatureSensors
-import org.raspikiln.kiln.switches.Switch
-import org.raspikiln.kiln.switches.SwitchState
-import org.raspikiln.kiln.switches.heatingElementSwitch
-import org.raspikiln.kiln.switches.maybeArmingSwitch
+import org.raspikiln.kiln.legacysensors.Sensor
+import org.raspikiln.kiln.legacysensors.zoneTemperatureSensors
+import org.raspikiln.kiln.switches.*
 
 typealias KilnZoneName = String
 
@@ -66,4 +63,12 @@ class KilnZone(
             heatingElementSwitch.toggle(switchState)
         }
     }
+
+    fun temperatureSensors() = listOf(temperatureSensor)
+
+    fun heaterState() = heatingElementSwitch.switchState()
 }
+
+fun List<KilnZone>.target() = mapNotNull { it.target() }.maxOfOrNull { it.celsius().value }
+fun List<KilnZone>.heaterState() = map { it.heaterState() }.anyOn() ?: SwitchState.Off
+fun List<KilnZone>.temperatureSensors() = flatMap { it.temperatureSensors() }.toSet().toList()

@@ -1,11 +1,11 @@
 package org.raspikiln.rpi.components
 
+import at.favre.lib.bytes.Bytes
 import com.pi4j.io.spi.Spi
-import org.raspikiln.core.bytes.asBits
 import org.raspikiln.core.units.Temperature
 import org.raspikiln.kiln.common.KilnLocation
-import org.raspikiln.kiln.sensors.TemperatureMeasurement
-import org.raspikiln.kiln.sensors.TemperatureSensor
+import org.raspikiln.kiln.legacysensors.TemperatureMeasurement
+import org.raspikiln.kiln.legacysensors.TemperatureSensor
 import org.raspikiln.kiln.zones.KilnZoneName
 
 /**
@@ -32,13 +32,32 @@ class MAX31855(
     override fun read(): TemperatureMeasurement {
         // TODO Check for faults and throw errors.
 
-        val bits = readBits()
+        val bytes = readBytes()
+
+        val thermocoupleTemperature =
+            Temperature.Celsius(bytes.thermocoupleTemperature())
+
+        val junctionTemperature = Temperature.Celsius(bytes.junctionTemperature())
+
+        // 0 bit sign, 1 - 11 bits temperature . (2 bits
+        /*
         val temperature = Temperature.Celsius(
             bits.getMsbInt(0 until 12).toDouble() + bits.getMsbUInt(12 until 14).toDouble() * 0.25
         )
+         */
 
-        return TemperatureMeasurement(temperature)
+        return TemperatureMeasurement(thermocoupleTemperature)
     }
 
-    private fun readBits() = spi.readNBytes(DataLengthBytes).asBits()
+    private fun readBytes() = Bytes.wrap(spi.readNBytes(DataLengthBytes))
+
+    private fun Bytes.thermocoupleTemperature() =
+        toBigInteger().shiftRight(18).intValueExact().toDouble() * 0.25
+
+    private fun Bytes.junctionTemperature() =
+        and(Bytes.parseHex("0x0000FFFF"))
+            .toBigInteger()
+            .shiftRight(4)
+            .intValueExact()
+            .toDouble() * 0.0625
 }

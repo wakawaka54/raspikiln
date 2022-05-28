@@ -5,4 +5,10 @@ export module SharedAction {
 
     constructor(public themeName: string) { }
   }
+
+  export class ToggleToolbar {
+    static readonly type = '[Shared] Toggle Toolbar';
+
+    constructor(public enabled: boolean) { }
+  }
 }

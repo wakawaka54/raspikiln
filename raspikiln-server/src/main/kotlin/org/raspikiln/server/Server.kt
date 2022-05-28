@@ -1,19 +1,40 @@
 package org.raspikiln.server
 
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.types.file
 import mu.KotlinLogging
-import java.lang.Exception
+import org.raspikiln.server.config.ConfigFileReader
 
-private val logger = KotlinLogging.logger {  }
+private val logger = KotlinLogging.logger { }
 
-/**
- * Entrypoint of the RPI server.
- */
-fun main(args: Array<String>) {
-    try {
-        ServerCommand().main(args)
-    } catch (ex: Exception) {
-        logger.error(ex) { "Raspikiln exited due to an unhandled exception!" }
-    } finally {
-        // do something.
+class Server(
+    private val appComponentFactory: AppComponentFactory = AppComponentFactory.koin(KilnDefinitionProviders.raspberryPi())
+) : CliktCommand(
+    name = "raspikiln",
+    help = "Launch raspikiln application."
+) {
+
+    private val configFile by option("--config", "-c").file(mustExist = true, mustBeReadable = true).required()
+
+    private val configFileReader = ConfigFileReader()
+
+    override fun run() {
+        logger.info { "Starting raspikiln..." }
+        logger.info { "Kiln definition is\n${configFile.readText()}" }
+
+        appComponentFactory
+            .create(config = configFileReader.read(configFile))
+            .kilnApplication()
+            .run()
+
+        waitUntilStopped()
+    }
+
+    private fun waitUntilStopped() {
+        while (true) {
+            Thread.sleep(1000)
+        }
     }
 }

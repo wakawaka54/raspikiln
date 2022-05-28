@@ -1,17 +1,17 @@
 package org.raspikiln.http
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.json.JsonWriteFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import io.ktor.application.*
-import io.ktor.application.*
-import io.ktor.features.*
 import io.ktor.http.*
-import io.ktor.jackson.*
-import io.ktor.response.*
+import io.ktor.serialization.jackson.*
+import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.response.*
 import org.raspikiln.core.registerCoreModule
 import org.raspikiln.http.health.healthApi
 import org.raspikiln.http.kiln.jackson.registerKilnApiModule
@@ -31,7 +31,7 @@ class KilnHttp(private val application: ApplicationEngine) {
                     level = Level.WARN
                 }
                 install(CORS) {
-                    header(HttpHeaders.ContentType)
+                    allowHeader(HttpHeaders.ContentType)
 
                     anyHost()
                 }
@@ -44,11 +44,11 @@ class KilnHttp(private val application: ApplicationEngine) {
                     }
                 }
                 install(StatusPages) {
-                    this.exception<Throwable> {
-                        ex -> call.respond(
+                    exception { call: ApplicationCall, cause: Throwable ->
+                        call.respond(
                             status = HttpStatusCode.InternalServerError,
                             message = mapOf(
-                                "stackTrace" to ex.stackTraceToString()
+                                "stackTrace" to cause.stackTraceToString()
                             )
                         )
                     }

@@ -3,7 +3,7 @@ import {KilnApiService} from "../core/kiln-api/kiln-api.service";
 import {Injectable} from "@angular/core";
 import {DashboardConfig, Kiln} from "./kiln.actions";
 import {switchMap, tap} from "rxjs";
-import {KilnStatus, MetricInfo, SwitchState, Temperature} from "../core/kiln-api/kiln-api.types";
+import {KilnStatus, MetricInfo, SwitchState, Temperature, TEMPERATURE_UNKNOWN} from "../core/kiln-api/kiln-api.types";
 import {KilnBackgroundUpdateService} from "./kiln-background-update.service";
 import GetStatus = Kiln.GetStatus;
 import StartProgram = Kiln.StartProgram;
@@ -31,10 +31,7 @@ export interface KilnState {
     autoUpdate: true,
     armState: 'off',
     zones: [],
-    temperature: {
-      value: -100,
-      unit: "celsius"
-    },
+    temperature: TEMPERATURE_UNKNOWN,
     dashboard: {
       temperatureMetrics: [],
       targetMetrics: []
@@ -51,6 +48,11 @@ export class KilnStore {
       temperatureTarget: state.temperatureTarget,
       armState: state.armState
     };
+  }
+
+  @Selector([KilnStore])
+  static currentTemperature(state: KilnState): Temperature {
+    return state.temperature;
   }
 
   @Selector([KilnStore])

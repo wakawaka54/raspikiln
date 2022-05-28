@@ -13,10 +13,13 @@ export class AppComponent implements OnInit {
   @HostBinding("class")
   public cssClass: string;
 
+  @Select(SharedStateStore.toolbarEnabled)
+  toolbarEnabled$: Observable<boolean>;
+
   @Select(SharedStateStore.theme)
   private theme$: Observable<string>;
 
-  title = 'webapp';
+  title = 'Raspikiln';
 
   constructor(private overlayContainer: OverlayContainer) { }
 

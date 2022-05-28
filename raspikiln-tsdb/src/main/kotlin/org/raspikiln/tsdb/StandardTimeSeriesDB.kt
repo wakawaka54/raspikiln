@@ -85,7 +85,3 @@ class StandardTimeSeriesDB(private val options: Options) : TimesSeriesDB {
 }
 
 private fun File.files() = listFiles() ?: emptyArray()
-
-private fun BlockingDeque<DiskPartition>.removeSequence() = sequence {
-    while (isNotEmpty()) { yield(remove()) }
-}

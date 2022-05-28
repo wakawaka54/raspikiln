@@ -20,6 +20,8 @@ import {SharedModule} from "./shared/shared.module";
 import {DashboardModule} from "./dashboard/dashboard.module";
 import {SnackbarStore} from "./core/snackbar/snackbar.store";
 import {SharedStateStore} from "./shared/shared.state";
+import {environment} from "../environments/environment";
+import {KioskModule} from "./kiosk/kiosk.module";
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import {SharedStateStore} from "./shared/shared.state";
     HttpClientModule,
 
     DashboardModule,
+    KioskModule,
 
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
@@ -52,8 +55,9 @@ import {SharedStateStore} from "./shared/shared.state";
     {
       provide: KILN_API_SERVICE_OPTIONS,
       useValue: {
+        endpoint: environment.kiln.httpApi,
         // endpoint: 'http://192.168.1.157:8080'
-        endpoint: 'http://localhost:8080'
+        // endpoint: 'http://localhost:8080'
       } as KilnApiServiceOptions
     }
   ],

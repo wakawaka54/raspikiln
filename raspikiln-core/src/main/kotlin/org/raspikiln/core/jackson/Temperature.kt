@@ -29,7 +29,7 @@ class TemperatureDeserializer : StdDeserializer<Temperature>(Temperature::class.
         val temperatureAmount = parser.readValueAs(TemperatureAmount::class.java)
         return when (temperatureAmount.unit) {
             Temperature.Celsius.UnitNmae -> Temperature.Celsius(value = temperatureAmount.value)
-            Temperature.Fahrenheit.UnitNmae -> Temperature.Fahrenheit(value = temperatureAmount.value)
+            Temperature.Fahrenheit.UnitName -> Temperature.Fahrenheit(value = temperatureAmount.value)
             else -> error("Unknown temperature unit ${temperatureAmount.unit}")
         }
     }

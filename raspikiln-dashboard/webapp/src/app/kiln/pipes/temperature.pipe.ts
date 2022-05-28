@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from "@angular/core";
-import {Temperature} from "../../core/kiln-api/kiln-api.types";
+import {Temperature, TEMPERATURE_UNKNOWN} from "../../core/kiln-api/kiln-api.types";
 
 @Pipe({
   name: 'temperatureFormat',
@@ -7,7 +7,7 @@ import {Temperature} from "../../core/kiln-api/kiln-api.types";
 })
 export class TemperaturePipe implements PipeTransform {
   transform(value: any): any {
-    if (value && (value as Temperature).value) {
+    if (value && (value as Temperature).value && value != TEMPERATURE_UNKNOWN) {
       const temperature = value as Temperature;
       return temperature.value.toFixed(2) + ' °C';
     } else {

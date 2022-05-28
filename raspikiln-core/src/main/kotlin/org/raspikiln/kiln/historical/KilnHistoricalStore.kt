@@ -14,6 +14,4 @@ interface KilnHistoricalStore {
      * Record a kiln state.
      */
     fun record(state: KilnState)
-
-    data class Entry<T>(val timestamp: ZonedDateTime, val value: T)
 }

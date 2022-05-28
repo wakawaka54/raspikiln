@@ -90,7 +90,7 @@ class ConcurrentJobScheduler(private val options: Options) : JobScheduler {
     data class Options(
         val threads: Int = 2,
         val capacity: Int = 20,
-        val precision: Duration = Duration.ofSeconds(1)
+        val precision: Duration = Duration.ofMillis(10)
     )
 }
 

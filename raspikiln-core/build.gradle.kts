@@ -8,7 +8,7 @@ val kotestVersion = "5.1.0"
 dependencies {
     implementation(kotlin("stdlib"))
 
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
 
     api(project(":raspikiln-tsdb"))
 
@@ -23,6 +23,8 @@ dependencies {
     api("io.github.microutils:kotlin-logging-jvm:2.1.21")
 
     api("org.slf4j:slf4j-api:1.7.33")
+
+    api("com.google.guava:guava:31.1-jre")
 
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")

@@ -21,6 +21,11 @@ export interface Temperature {
   value: number;
 }
 
+export const TEMPERATURE_UNKNOWN: Temperature = {
+  value: -1000,
+  unit: "celsius"
+}
+
 export interface MetricQueryResult {
   series: MetricQuerySeries[];
   points: ([ number, number? ])[]

@@ -12,14 +12,11 @@ private val logger = KotlinLogging.logger {  }
  */
 fun main(args: Array<String>) {
     logger.info { "Starting mock server..." }
-    ServerCommand(koinAppFn = koinApp(MockServerModule)).main(args)
+    Server(appComponentFactory = AppComponentFactory.koin(mock())).main(args)
 }
 
-private val MockServerModule = module {
-    single {
-        KilnDefinitionProviderRegistration(
-            name = "mock",
-            provider = MockKilnDefinitionProvider()
-        )
-    }
-}
+private fun mock() =
+    KilnDefinitionProviderRegistration(
+        name = "mock",
+        provider = MockKilnDefinitionProvider()
+    )

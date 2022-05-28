@@ -1,9 +1,9 @@
 package org.raspikiln.rpi
 
 import mu.KotlinLogging
-import org.raspikiln.kiln.config.SwitchConfig
-import org.raspikiln.kiln.config.SwitchConfig.ArmingSwitchConfig
-import org.raspikiln.kiln.config.SwitchConfig.HeatingElementSwitchConfig
+import org.raspikiln.kiln.config.switches.SwitchConfig
+import org.raspikiln.kiln.config.switches.SwitchConfig.ArmingSwitchConfig
+import org.raspikiln.kiln.config.switches.SwitchConfig.HeatingElementSwitchConfig
 import org.raspikiln.kiln.kilnProviderError
 import org.raspikiln.kiln.switches.Switch
 import org.raspikiln.kiln.switches.SwitchType

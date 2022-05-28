@@ -8,15 +8,15 @@ application {
     applicationDefaultJvmArgs = listOf("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005")
 }
 
-val cliktVersion = "3.4.0"
-val koinVersion = "3.1.5"
-val log4j2 = "2.17.1"
+val cliktVersion = "3.4.2"
+val koinVersion = "3.2.0"
+val log4j2 = "2.17.2"
+val ktorVersion = "2.0.1"
 
 dependencies {
     implementation(kotlin("stdlib"))
 
     implementation(project(":raspikiln-core"))
-    implementation(project(":raspikiln-controller"))
     implementation(project(":raspikiln-http"))
     implementation(project(":raspikiln-rpi"))
 
@@ -31,7 +31,8 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:$log4j2")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4j2")
 
-    implementation("org.slf4j:slf4j-api:1.7.33")
+    implementation("org.slf4j:slf4j-api:1.7.36")
 
     testImplementation(project(":raspikiln-mock"))
+    testImplementation("io.ktor:ktor-server-html-builder:$ktorVersion")
 }

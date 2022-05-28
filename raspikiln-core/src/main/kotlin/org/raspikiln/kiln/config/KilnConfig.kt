@@ -1,12 +1,8 @@
 package org.raspikiln.kiln.config
 
-/**
- * High level kiln config file.
- */
-data class KilnConfigDefinition(
-    val kiln: KilnConfig,
-    val http: HttpConfig = HttpConfig(enabled = false)
-)
+import org.raspikiln.kiln.config.controllers.ControllerConfig
+import org.raspikiln.kiln.config.sensors.SensorConfig
+import org.raspikiln.kiln.config.switches.SwitchConfig
 
 /**
  * Kiln configuration.
@@ -26,5 +22,10 @@ data class KilnConfig(
     /**
      * Switches configured in the kiln.
      */
-    val switches: List<SwitchConfig> = emptyList()
+    val switches: List<SwitchConfig> = emptyList(),
+
+    /**
+     * Controllers configured in the kiln.
+     */
+    val controllers: List<ControllerConfig> = emptyList()
 )

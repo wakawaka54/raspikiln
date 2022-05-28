@@ -1,13 +1,14 @@
 package org.raspikiln.http.timeseries
 
-import io.ktor.application.*
 import io.ktor.http.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 import org.raspikiln.tsdb.TimesSeriesDB
 import java.time.Duration
 import java.time.Instant
+import kotlin.text.get
 
 fun Application.timeseriesApi() {
     val timeSeriesDB: TimesSeriesDB by inject()

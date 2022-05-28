@@ -1,23 +1,37 @@
 http:
   port: 8080
+
 kiln:
   provider: rpi
   sensors:
-    - name: "thermocouple-a"
-      type: temperature
-      zone: 0
-      sensor:
-        type: MAX31855
-        spi:
-          address: 0
+    - type: MAX31855
+      sampling:
+        window: 2s
+        samples: 20
+      spi:
+        address: 0
+      provides:
+        - name: "thermocouple-a"
+          type: temperature
+          location: oven
+        - name: "temperature-electronics"
+          type: temperature
+          location: electronics
   switches:
     - name: "arming-switch"
       type: "arming-switch"
-      zones: [ 0 ]
+      zones: [ oven ]
       digitalOutput:
         pin: 12
     - name: "heater-switch"
       type: "heating-element-switch"
-      zones: [ 0 ]
+      zones: [ oven ]
       digitalOutput:
         pin: 22
+  controllers:
+    - type: "pid"
+      dutyCycle: 2000 # 2 seconds
+      kp: 100
+      ki: 0
+      kd: 0
+      monitors: [ oven ]

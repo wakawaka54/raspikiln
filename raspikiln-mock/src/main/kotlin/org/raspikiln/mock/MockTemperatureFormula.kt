@@ -3,6 +3,10 @@ package org.raspikiln.mock
 import org.raspikiln.core.units.Temperature
 import org.raspikiln.kiln.switches.SwitchState
 import java.time.Clock
+import java.time.Instant
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.DurationUnit
 
 /**
  * Computes the temperature of a mock kiln.
@@ -36,18 +40,19 @@ import java.time.Clock
  */
 class MockTemperatureFormula(private val parameters: Parameters) {
     private val initialEnergy = parameters.roomTemperature * parameters.wattsPerDegreeCelsius
+    private val heatingElement = HeatingElementFormula(elementWattage = parameters.elementWattage)
     private var temperature = parameters.roomTemperature
-    private var lastUpdate = Clock.systemUTC().millis()
+    private var lastUpdate = parameters.startTime.toEpochMilli()
     private var currentRateOfChange: Double = 0.0
 
     fun currentTemperature() = Temperature.Celsius(temperature)
 
     fun computeNext(state: ComputationState): Temperature {
-        val now = Clock.systemUTC().millis()
+        val now = state.currentTime.toEpochMilli()
         val elapsedTime = (now - lastUpdate).toDouble() / 1000.0
         val energyIn = state.energyIn(elapsedTime)
         val energyOut = energyOut(elapsedTime)
-        val kilnEnergy = kilnEnergy() + energyIn - energyOut
+        val kilnEnergy = kilnEnergy() + (energyIn - energyOut)
         val kilnEnergyWithDifferential = kilnEnergy + currentRateOfChange * parameters.differentialInertia
 
         val boundedKilnEnergyWithDifferential = kilnEnergyWithDifferential.coerceAtLeast(0.0)
@@ -60,10 +65,7 @@ class MockTemperatureFormula(private val parameters: Parameters) {
     }
 
     private fun ComputationState.energyIn(timeElapsedSeconds: Double): Double =
-        when (elementState) {
-            SwitchState.On -> parameters.elementWattage * timeElapsedSeconds
-            SwitchState.Off -> 0.0
-        }
+        heatingElement.computeNext(timeElapsedSeconds.seconds, elementState)
 
     private fun energyOut(timeElapsedSeconds: Double): Double {
         val tempDiff = temperature - parameters.roomTemperature
@@ -74,16 +76,40 @@ class MockTemperatureFormula(private val parameters: Parameters) {
     private fun kilnEnergy() = parameters.wattsPerDegreeCelsius * temperature - initialEnergy
 
     data class Parameters(
-        val elementWattage: Int = 2000,
-        val roomTemperature: Double = 20.0,
-        val thermalEfficiency: Double = 0.95,
+        val startTime: Instant = Instant.now(),
+        val elementWattage: Int = 800,
+        val kilnTemperature: Double = RoomTemperature.value,
+        val roomTemperature: Double = RoomTemperature.value,
+        val thermalEfficiency: Double = 0.98,
         val volume: Double = 1.0,
-        val loseWattage: Double = 500.0,
-        val differentialInertia: Double = 0.01,
-        val wattsPerDegreeCelsius: Double = 18000.0
+        val loseWattage: Double = 100.0, // watts / (temp diff * second * volume)
+        val differentialInertia: Double = 0.5,
+        val wattsPerDegreeCelsius: Double = 20000.0
     )
 
     data class ComputationState(
+        val currentTime: Instant = Instant.now(),
         val elementState: SwitchState
     )
+}
+
+private class HeatingElementFormula(private val elementWattage: Int) {
+    private val timeToHeat = 30.seconds
+    private val energyPerSecond: Double = elementWattage / timeToHeat.toDouble(DurationUnit.SECONDS)
+    private var energyOut: Double = 0.0
+
+    fun computeNext(duration: Duration, elementState: SwitchState): Double {
+        val deltaEnergy = elementState.sign() * duration.toDouble(DurationUnit.SECONDS) * energyPerSecond
+        energyOut = (energyOut + deltaEnergy).coerceIn(0.0..elementWattage.toDouble())
+
+        return energyOut()
+    }
+
+    fun energyOut() = energyOut
+
+    private fun SwitchState.sign(): Double =
+        when (this) {
+            SwitchState.On -> 1.0
+            SwitchState.Off -> -1.0
+        }
 }

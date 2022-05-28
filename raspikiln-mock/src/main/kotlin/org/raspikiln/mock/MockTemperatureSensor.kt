@@ -2,8 +2,8 @@ package org.raspikiln.mock
 
 import org.raspikiln.core.units.Temperature
 import org.raspikiln.kiln.common.KilnLocation
-import org.raspikiln.kiln.sensors.TemperatureMeasurement
-import org.raspikiln.kiln.sensors.TemperatureSensor
+import org.raspikiln.kiln.legacysensors.TemperatureMeasurement
+import org.raspikiln.kiln.legacysensors.TemperatureSensor
 import org.raspikiln.kiln.zones.KilnZoneName
 import org.raspikiln.kiln.zones.KilnZoneNames
 

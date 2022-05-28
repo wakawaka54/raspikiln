@@ -1,24 +1,27 @@
 package org.raspikiln.server
 
 import mu.KotlinLogging
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import org.raspikiln.http.KilnHttp
+import org.raspikiln.kiln.Kiln
 import org.raspikiln.kiln.config.HttpConfig
 import org.raspikiln.kiln.config.KilnConfigDefinition
 
 private val logger = KotlinLogging.logger {  }
 
-class KilnApplication : KoinComponent {
-    private val kilnConfigDefinition: KilnConfigDefinition by inject()
+class KilnApplication(
+    private val kilnConfigDefinition: KilnConfigDefinition,
+    private val kiln: Kiln
+) {
 
     fun run() {
+        kiln.start()
+
         with (kilnConfigDefinition) {
-            http.startHttp()
+            http.maybeStartHttp()
         }
     }
 
-    private fun HttpConfig.startHttp() {
+    private fun HttpConfig.maybeStartHttp() {
         if (!enabled) { return }
 
         logger.info { "Starting HTTP API on $port" }

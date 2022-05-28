@@ -1,5 +1,5 @@
 <div class="h-100">
-  <mat-toolbar>
+  <mat-toolbar *ngIf="toolbarEnabled$ | async">
     <span>Raspikiln</span>
     <span class="nav-spacer"></span>
     <app-theme-toggle [themes]="[ 'light-theme', 'dark-theme' ]"></app-theme-toggle>

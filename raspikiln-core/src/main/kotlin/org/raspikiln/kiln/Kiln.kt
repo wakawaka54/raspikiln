@@ -3,14 +3,16 @@ package org.raspikiln.kiln
 import mu.KotlinLogging
 import org.raspikiln.core.units.average
 import org.raspikiln.jobs.onGlobal
+import org.raspikiln.kiln.bridge.KilnBridge
+import org.raspikiln.kiln.bridge.kilnZones
 import org.raspikiln.kiln.common.atomicValue
+import org.raspikiln.kiln.controller.TemperatureControllerJob
 import org.raspikiln.kiln.historical.HistoricalArchiveJob
 import org.raspikiln.kiln.historical.KilnHistoricalStore
 import org.raspikiln.kiln.programs.*
 import org.raspikiln.kiln.programs.types.ProgramDefinition
 import org.raspikiln.kiln.switches.SwitchState
 import org.raspikiln.kiln.switches.anyOn
-import org.raspikiln.kiln.switches.heatingElementSwitch
 import org.raspikiln.kiln.zones.KilnZoneName
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.time.Duration.Companion.seconds
@@ -21,12 +23,14 @@ private val logger = KotlinLogging.logger {  }
  * Kiln abstraction.
  */
 class Kiln(
-    private val definition: KilnDefinition,
+    private val bridge: KilnBridge,
     private val historicalStore: KilnHistoricalStore
 ) {
     private val started = AtomicBoolean(false)
     private val programFactory = ProgramFactory()
-    private val zones = definition.kilnZones().associateBy { it.name }
+
+    private val zones = bridge.kilnZones().associateBy { it.name }
+    private val controllers = bridge.controllers()
     private var program: Program? by atomicValue()
 
     fun start() = apply {
@@ -40,6 +44,13 @@ class Kiln(
                 kiln = this,
                 options = ProgramEvaluatorJobOptions(interval = 1.seconds)
             ).onGlobal()
+
+            controllers.forEach { controller ->
+                TemperatureControllerJob(
+                    kiln = this,
+                    controller = controller
+                ).onGlobal()
+            }
         }
     }
 
@@ -87,7 +98,7 @@ class Kiln(
     /**
      * The kiln definition.
      */
-    fun definition() = definition
+    fun definition() = bridge
 }
 
 fun Kiln.zoneNames() = zones().map { it.name }

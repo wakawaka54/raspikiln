@@ -19,5 +19,4 @@ class ConfigTest : FunSpec({
     }
 })
 
-private fun readConfig(name: String): KilnConfigDefinition =
-    YamlMapper.mapper().readValue(TestResource.config(name))
+private fun readConfig(name: String): Config = YamlMapper.mapper().readValue(TestResource.config(name))

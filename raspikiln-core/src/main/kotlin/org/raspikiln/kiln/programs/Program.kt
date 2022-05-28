@@ -1,7 +1,5 @@
 package org.raspikiln.kiln.programs
 
-import org.raspikiln.kiln.Kiln
-
 /**
  * Defines a kiln program.
  */

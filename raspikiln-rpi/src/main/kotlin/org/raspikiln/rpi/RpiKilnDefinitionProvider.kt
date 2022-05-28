@@ -1,8 +1,8 @@
 package org.raspikiln.rpi
 
 import mu.KotlinLogging
-import org.raspikiln.kiln.KilnDefinition
-import org.raspikiln.kiln.KilnDefinitionProvider
+import org.raspikiln.kiln.BaseKilnDefinitionProvider
+import org.raspikiln.kiln.KilnBridge
 import org.raspikiln.kiln.config.KilnConfig
 import org.raspikiln.rpi.core.PiContext
 
@@ -13,13 +13,14 @@ private val logger = KotlinLogging.logger {  }
  */
 class RpiKilnDefinitionProvider(
     private val rpiInitializer: RpiInitializer = RpiInitializer.native()
-) : KilnDefinitionProvider {
-    override fun create(config: KilnConfig): KilnDefinition =
+) : BaseKilnDefinitionProvider() {
+    override fun create(config: KilnConfig): KilnBridge =
         with (initPi()) {
             RpiKilnDefinition(
                 pi4j = this,
                 sensors = createSensors(config),
-                switches = createSwitches(config)
+                switches = createSwitches(config),
+                controllers = config.createControllers()
             )
             .bindShutdown()
         }
