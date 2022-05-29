@@ -1,33 +1,32 @@
 package org.raspikiln.mock
 
-import org.raspikiln.jobs.onGlobal
-import org.raspikiln.kiln.KilnBridge
+import org.raspikiln.core.services.scheduledService
+import org.raspikiln.kiln.bridge.KilnBridge
+import org.raspikiln.kiln.common.KilnLocation
 import org.raspikiln.kiln.controller.PidController
 import org.raspikiln.kiln.controller.TemperatureController
 import org.raspikiln.kiln.controller.algorithm.TupleTerms
-import org.raspikiln.kiln.legacysensors.Sensor
-import org.raspikiln.kiln.legacysensors.withSampling
+import org.raspikiln.kiln.initialization.KilnInitializationBuilder
+import org.raspikiln.kiln.sensors.Sensor
 import org.raspikiln.kiln.switches.Switch
-import org.raspikiln.kiln.zones.KilnZoneName
-import org.raspikiln.kiln.zones.KilnZoneNames
 import kotlin.time.Duration.Companion.seconds
 
 /**
  * Kiln definition that is mocked.
  */
-class MockKilnDefinition : KilnBridge {
+class MockKilnBridge : KilnBridge {
     private val mockState = MockKilnState(
         options = MockKilnState.Options(
             temperatureFormula = MockTemperatureFormula(MockTemperatureFormula.Parameters())
         )
     )
 
-    private val temperatureSensor =
-        MockTemperatureSensor(mockState).withSampling(windowDuration = 2.seconds, windowSamples = 20)
+    private val temperatureSensor = MockTemperatureSensor(mockState)
 
-    private val heaterSwitch = MockHeaterSwitch(mockState)
+    private val heaterSwitch = MockHeaterSwitch(mockState, setOf(KilnLocation.Oven))
+
     private val temperatureController = PidController(
-        zones = setOf(KilnZoneNames.Zone0),
+        locations = setOf(KilnLocation.Oven),
         options = PidController.Options(
             dutyCycle = 2.seconds,
             gainTerms = TupleTerms(
@@ -39,11 +38,14 @@ class MockKilnDefinition : KilnBridge {
     )
 
     init {
-        MockFormulaUpdateJob(mockState).onGlobal()
+        // MockFormulaUpdateJob(mockState).onGlobal()
     }
 
-    override fun zones(): Set<KilnZoneName> =
-        (sensors().map { it.zone() } + switches().flatMap { it.zones() }).toSet()
+    override fun initialize(builder: KilnInitializationBuilder) {
+        builder.registerService(
+            scheduledService(name = "MockStateUpdate", period = 1.seconds) { mockState.update() }
+        )
+    }
 
     override fun sensors(): List<Sensor> = listOf(temperatureSensor)
 

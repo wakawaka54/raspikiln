@@ -1,20 +1,20 @@
 package org.raspikiln.server
 
-import org.raspikiln.kiln.KilnDefinitionProviderRegistration
-import org.raspikiln.kiln.config.KilnConfigDefinition
+import org.raspikiln.kiln.bridge.KilnBridgeProviderRegistry
+import org.raspikiln.kiln.config.Config
 
 interface AppComponentFactory {
     companion object {
-        fun koin(vararg definitionProviders: KilnDefinitionProviderRegistration): AppComponentFactory =
-            KoinAppComponentFactory(definitionProviders.toList())
+        fun create(bridgeRegistry: KilnBridgeProviderRegistry): AppComponentFactory =
+            KoinAppComponentFactory(bridgeRegistry)
     }
 
-    fun create(config: KilnConfigDefinition): AppComponent
+    fun create(config: Config): AppComponent
 }
 
 class KoinAppComponentFactory(
-    private val definitionProviders: List<KilnDefinitionProviderRegistration>
+    private val bridgeRegistry: KilnBridgeProviderRegistry
 ) : AppComponentFactory {
-    override fun create(config: KilnConfigDefinition): AppComponent =
-        AppComponent.create(serverModule(config = config, kilnDefinitionProviders = definitionProviders))
+    override fun create(config: Config): AppComponent =
+        AppComponent.create(serverModule(config = config, bridgeProviderRegistry = bridgeRegistry))
 }

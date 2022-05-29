@@ -1,4 +1,10 @@
 http:
   port: 8080
+  dashboard:
+    metrics:
+      - display: "Temperature"
+        metric: temperature.oven
+      - display: "Target Temperature"
+        metric: temperature.target
 kiln:
   provider: mock

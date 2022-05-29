@@ -1,8 +1,8 @@
 package org.raspikiln.kiln.switches
 
+import org.raspikiln.kiln.common.KilnLocation
 import org.raspikiln.kiln.common.intersectAll
 import org.raspikiln.kiln.common.requiredAll
-import org.raspikiln.kiln.zones.KilnZoneName
 
 /**
  * Aggregate multiple switches.
@@ -23,7 +23,7 @@ private class AggregatedSwitch(private val switches: List<Switch>) : Switch {
 
     override fun switchType(): SwitchType = switches.requiredAll { it.switchType() }
 
-    override fun zones(): Set<KilnZoneName> = switches.intersectAll { it.zones() }
+    override fun locations(): Set<KilnLocation> = switches.intersectAll { it.locations() }
 
     override fun switchState(): SwitchState = switches.requiredAll { it.switchState() }
 

@@ -1,5 +1,11 @@
 http:
   port: 8080
+  dashboard:
+    metrics:
+      - display: "Temperature"
+        metric: temperature.oven
+      - display: "Target Temperature"
+        metric: temperature.target
 
 kiln:
   provider: rpi
@@ -13,19 +19,23 @@ kiln:
       provides:
         - name: "thermocouple-a"
           type: temperature
+          address: thermocouple
           location: oven
+          metric: temperature.oven
         - name: "temperature-electronics"
+          address: junction
           type: temperature
           location: electronics
+          metric: temperature.electronics
   switches:
     - name: "arming-switch"
       type: "arming-switch"
-      zones: [ oven ]
+      locations: [ oven ]
       digitalOutput:
         pin: 12
     - name: "heater-switch"
       type: "heating-element-switch"
-      zones: [ oven ]
+      locations: [ oven ]
       digitalOutput:
         pin: 22
   controllers:
@@ -34,4 +44,5 @@ kiln:
       kp: 100
       ki: 0
       kd: 0
-      monitors: [ oven ]
+      locations: [ oven ]
+      targetMetric: temperature.target

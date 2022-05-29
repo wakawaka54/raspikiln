@@ -1,4 +1,4 @@
-package org.raspikiln.kiln.config
+package org.raspikiln.kiln.config.http
 
 data class HttpConfig(
     /**
@@ -9,5 +9,10 @@ data class HttpConfig(
     /**
      * The port to enable the HTTP server on.
      */
-    val port: Int
+    val port: Int,
+
+    /**
+     * Dashboard configuration.
+     */
+    val dashboard: DashboardConfig
 )

@@ -1,12 +1,14 @@
 package org.raspikiln.mock
 
+import org.raspikiln.kiln.common.KilnLocation
 import org.raspikiln.kiln.switches.Switch
 import org.raspikiln.kiln.switches.SwitchState
 import org.raspikiln.kiln.switches.SwitchType
-import org.raspikiln.kiln.zones.KilnZoneName
-import org.raspikiln.kiln.zones.KilnZoneNames
 
-class MockHeaterSwitch(private val kilnState: MockKilnState) : Switch {
+class MockHeaterSwitch(
+    private val kilnState: MockKilnState,
+    private val locations: Set<KilnLocation>
+) : Switch {
     private var state: SwitchState = SwitchState.Off
 
     init {
@@ -17,7 +19,7 @@ class MockHeaterSwitch(private val kilnState: MockKilnState) : Switch {
 
     override fun switchType(): SwitchType = SwitchType.HeaterSwitch
 
-    override fun zones(): Set<KilnZoneName> = setOf(KilnZoneNames.Zone0)
+    override fun locations(): Set<KilnLocation> = locations
 
     override fun switchState(): SwitchState = state
 

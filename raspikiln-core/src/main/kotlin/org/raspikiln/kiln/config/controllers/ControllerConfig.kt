@@ -2,7 +2,7 @@ package org.raspikiln.kiln.config.controllers
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.annotation.JsonTypeName
-import org.raspikiln.kiln.zones.KilnZoneName
+import org.raspikiln.kiln.common.KilnLocation
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
@@ -14,7 +14,8 @@ sealed interface ControllerConfig {
     data class OnOff(
         val dutyCycle: Int,
         val hysteresis: Double,
-        val zones: List<KilnZoneName>
+        val locations: List<KilnLocation>,
+        val targetMetric: String
     ) : ControllerConfig
 
     @JsonTypeName("pid")
@@ -23,6 +24,7 @@ sealed interface ControllerConfig {
         val kp: Double,
         val ki: Double,
         val kd: Double,
-        val zones: List<KilnZoneName>
+        val locations: List<KilnLocation>,
+        val targetMetric: String
     ) : ControllerConfig
 }

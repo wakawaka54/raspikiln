@@ -1,38 +1,32 @@
 package org.raspikiln.kiln.sensors.sampling
 
-import com.google.common.util.concurrent.AbstractScheduledService
-import org.raspikiln.core.services.AbstractFixedScheduledService
+import org.raspikiln.core.services.scheduledService
 import org.raspikiln.core.units.Temperature
 import org.raspikiln.kiln.common.KilnLocation
+import org.raspikiln.kiln.initialization.KilnInitializationBuilder
 import org.raspikiln.kiln.sensors.TemperatureMeasurement
 import org.raspikiln.kiln.sensors.TemperatureSensor
-import java.util.concurrent.ArrayBlockingQueue
-import java.util.concurrent.BlockingQueue
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.LinkedBlockingQueue
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
-import kotlin.time.toJavaDuration
 
 class SamplingTemperatureSensor(
     private val name: String,
     private val sensor: TemperatureSensor,
     private val window: Duration,
     private val samples: Int
-) : TemperatureSensor, AbstractScheduledService() {
+) : TemperatureSensor {
 
     private val sampleMap = ConcurrentHashMap<KilnLocation, SlidingWindowSampler<TemperatureMeasurement>>()
+    private val service = scheduledService(name = "$name-sampling", period = window / samples) { sample() }
 
     override fun name(): String = name
+
+    override fun initialize(initializer: KilnInitializationBuilder) { initializer.registerService(service) }
 
     override fun temperature(): List<TemperatureMeasurement> =
         sampleMap.map { (location, sampler) -> sampler.read(location) }
 
-    override fun scheduler(): Scheduler = Scheduler.newFixedRateSchedule(
-        0.seconds.toJavaDuration(), window.toJavaDuration()
-    )
-
-    override fun runOneIteration() {
+    private fun sample() {
         sensor.temperature().forEach {
             windowSampler(it.location).sample(it)
         }

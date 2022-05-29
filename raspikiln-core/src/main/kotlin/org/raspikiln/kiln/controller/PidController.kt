@@ -1,8 +1,8 @@
 package org.raspikiln.kiln.controller
 
+import org.raspikiln.kiln.common.KilnLocation
 import org.raspikiln.kiln.controller.algorithm.ProportionalIntegralDerivative
 import org.raspikiln.kiln.controller.algorithm.TupleTerms
-import org.raspikiln.kiln.zones.KilnZoneName
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -10,7 +10,7 @@ import kotlin.time.Duration.Companion.milliseconds
  * PID Controller.
  */
 class PidController(
-    private val zones: Set<KilnZoneName>,
+    private val locations: Set<KilnLocation>,
     private val options: Options
 ) : TemperatureController {
     private val pid = ProportionalIntegralDerivative(
@@ -21,7 +21,7 @@ class PidController(
 
     override fun name(): String = "PID"
 
-    override fun zones(): Set<KilnZoneName> = zones
+    override fun locations(): Set<KilnLocation> = locations
 
     override fun dutyCycle(): Duration = options.dutyCycle
 

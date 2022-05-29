@@ -1,4 +1,4 @@
-package org.raspikiln.kiln.jackson
+package org.raspikiln.kiln.config.jackson
 
 import com.fasterxml.jackson.databind.module.SimpleModule
 import org.raspikiln.kiln.common.KilnLocation

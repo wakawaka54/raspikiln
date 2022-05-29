@@ -1,26 +1,26 @@
 package org.raspikiln.rpi
 
 import mu.KotlinLogging
-import org.raspikiln.kiln.BaseKilnDefinitionProvider
-import org.raspikiln.kiln.KilnBridge
+import org.raspikiln.kiln.bridge.KilnBridge
+import org.raspikiln.kiln.bridge.KilnBridgeProvider
 import org.raspikiln.kiln.config.KilnConfig
 import org.raspikiln.rpi.core.PiContext
-
-private val logger = KotlinLogging.logger {  }
 
 /**
  * Creates a RPI kiln.
  */
-class RpiKilnDefinitionProvider(
+class RpiKilnBridgeProvider(
     private val rpiInitializer: RpiInitializer = RpiInitializer.native()
-) : BaseKilnDefinitionProvider() {
+) : KilnBridgeProvider {
+    override fun name(): String = "rpi"
+
     override fun create(config: KilnConfig): KilnBridge =
         with (initPi()) {
-            RpiKilnDefinition(
+            RpiKilnBridge(
                 pi4j = this,
                 sensors = createSensors(config),
                 switches = createSwitches(config),
-                controllers = config.createControllers()
+                controllers = emptyList()
             )
             .bindShutdown()
         }
@@ -33,7 +33,7 @@ class RpiKilnDefinitionProvider(
     /**
      * Bind a RPI kiln shutdown hook.
      */
-    private fun RpiKilnDefinition.bindShutdown() = apply {
+    private fun RpiKilnBridge.bindShutdown() = apply {
         Runtime.getRuntime().addShutdownHook(Thread { shutdown() })
     }
 

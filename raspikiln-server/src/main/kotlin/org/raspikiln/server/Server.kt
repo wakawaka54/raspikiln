@@ -10,7 +10,7 @@ import org.raspikiln.server.config.ConfigFileReader
 private val logger = KotlinLogging.logger { }
 
 class Server(
-    private val appComponentFactory: AppComponentFactory = AppComponentFactory.koin(KilnDefinitionProviders.raspberryPi())
+    private val appComponentFactory: AppComponentFactory
 ) : CliktCommand(
     name = "raspikiln",
     help = "Launch raspikiln application."

@@ -3,7 +3,6 @@ package org.raspikiln.kiln.config.sensors
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.annotation.JsonTypeName
 import org.raspikiln.kiln.common.KilnLocation
-import org.raspikiln.kiln.zones.KilnZoneName
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
@@ -14,8 +13,25 @@ interface SensorMeasurementConfig {
 
     @JsonTypeName("temperature")
     data class Temperature(
+
+        /**
+         * Friendly name for the sensor.
+         */
         val name: String,
-        val location: KilnLocation = KilnLocation.Oven,
-        val zone: KilnZoneName,
+
+        /**
+         * Address identifier which is specific to the temperature sensor.
+         */
+        val address: String,
+
+        /**
+         * Location of the sensor.
+         */
+        val location: KilnLocation,
+
+        /**
+         * Metric name of the temperature sensor.
+         */
+        val metric: String
     )
 }

@@ -1,18 +1,17 @@
 package org.raspikiln.kiln.controller
 
-import org.raspikiln.core.units.Percentage
+import org.raspikiln.kiln.common.KilnLocation
 import org.raspikiln.kiln.switches.SwitchState
-import org.raspikiln.kiln.zones.KilnZoneName
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 class OnOffController(
-    private val zones: Set<KilnZoneName>,
+    private val locations: Set<KilnLocation>,
     private val options: Options
 ) : TemperatureController {
     override fun name(): String = "OnOff"
 
-    override fun zones(): Set<KilnZoneName> = zones
+    override fun locations(): Set<KilnLocation> = locations
 
     override fun dutyCycle(): Duration = options.dutyCycle
 
@@ -55,7 +54,7 @@ class OnOffController(
          * then the controller will turn off at 100C but turn back on when the temperature is below
          * 99.2C.
          */
-        val hysteresis: Percentage,
+        val hysteresis: Double,
 
         /**
          * Duty cycle of the controller.

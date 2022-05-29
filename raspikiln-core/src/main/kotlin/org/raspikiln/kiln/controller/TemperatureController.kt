@@ -1,14 +1,14 @@
 package org.raspikiln.kiln.controller
 
 import org.raspikiln.core.units.Temperature
+import org.raspikiln.kiln.common.KilnLocation
 import org.raspikiln.kiln.switches.SwitchState
-import org.raspikiln.kiln.zones.KilnZoneName
 import kotlin.time.Duration
 
 interface TemperatureController {
     fun name(): String
     fun dutyCycle(): Duration
-    fun zones(): Set<KilnZoneName>
+    fun locations(): Set<KilnLocation>
     fun reset()
     fun evaluate(input: ControllerInput): ControllerOutput
 }

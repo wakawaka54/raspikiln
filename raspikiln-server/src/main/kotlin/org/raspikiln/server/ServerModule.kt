@@ -1,13 +1,14 @@
 package org.raspikiln.server
 
 import org.koin.dsl.module
-import org.raspikiln.kiln.KilnDefinitionProviderRegistration
 import org.raspikiln.kiln.KilnFactory
-import org.raspikiln.kiln.config.KilnConfigDefinition
+import org.raspikiln.kiln.bridge.KilnBridgeProviderRegistry
+import org.raspikiln.kiln.config.Config
+import org.raspikiln.kiln.initialization.KilnInitializer
 
 fun serverModule(
-    config: KilnConfigDefinition,
-    kilnDefinitionProviders: List<KilnDefinitionProviderRegistration>
+    config: Config,
+    bridgeProviderRegistry: KilnBridgeProviderRegistry
 ) = module {
 
     single { config }
@@ -15,16 +16,15 @@ fun serverModule(
     single {
         KilnFactory(
                 timeSeriesDB = get(),
-                definitionProviders = getAll<KilnDefinitionProviderRegistration>().associate { it.name to it.provider }
+                bridgeRegistry = bridgeProviderRegistry,
+                initializer = KilnInitializer()
             )
             .create(config.kiln)
     }
 
-    kilnDefinitionProviders.forEach { definitionProvider -> single { definitionProvider } }
-
     single {
         KilnApplication(
-            kilnConfigDefinition = get(),
+            config = get(),
             kiln = get()
         )
     }

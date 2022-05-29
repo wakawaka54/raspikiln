@@ -17,7 +17,7 @@ class TemperatureSerializer : StdSerializer<Temperature>(Temperature::class.java
     ) {
         gen.writeObject(
             TemperatureAmount(
-                unit = Temperature.Celsius.UnitNmae,
+                unit = Temperature.Celsius.UnitName,
                 value = value.celsius().value
             )
         )
@@ -28,7 +28,7 @@ class TemperatureDeserializer : StdDeserializer<Temperature>(Temperature::class.
     override fun deserialize(parser: JsonParser, ctxt: DeserializationContext): Temperature {
         val temperatureAmount = parser.readValueAs(TemperatureAmount::class.java)
         return when (temperatureAmount.unit) {
-            Temperature.Celsius.UnitNmae -> Temperature.Celsius(value = temperatureAmount.value)
+            Temperature.Celsius.UnitName -> Temperature.Celsius(value = temperatureAmount.value)
             Temperature.Fahrenheit.UnitName -> Temperature.Fahrenheit(value = temperatureAmount.value)
             else -> error("Unknown temperature unit ${temperatureAmount.unit}")
         }

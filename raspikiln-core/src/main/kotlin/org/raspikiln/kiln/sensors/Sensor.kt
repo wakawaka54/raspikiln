@@ -1,7 +1,11 @@
 package org.raspikiln.kiln.sensors
 
-import org.raspikiln.core.services.Service
+import org.raspikiln.kiln.initialization.KilnInitializationBuilder
 
-interface Sensor : Service {
+interface Sensor {
     fun name(): String
+
+    fun initialize(initializer: KilnInitializationBuilder) {
+        // do nothing
+    }
 }

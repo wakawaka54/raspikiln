@@ -1,12 +1,10 @@
 package org.raspikiln.mock
 
-import org.raspikiln.jobs.ScheduledJob
-import java.time.ZonedDateTime
-
 /**
  * Updates mock formula.
  */
-class MockFormulaUpdateJob(private val kilnState: MockKilnState) : ScheduledJob {
+class MockFormulaUpdateJob(private val kilnState: MockKilnState) {
+    /**
     override val name: String = "MockFormulaJob"
 
     override fun first(): ZonedDateTime? = ZonedDateTime.now()
@@ -16,4 +14,5 @@ class MockFormulaUpdateJob(private val kilnState: MockKilnState) : ScheduledJob 
     override fun run() {
         kilnState.update()
     }
+    **/
 }

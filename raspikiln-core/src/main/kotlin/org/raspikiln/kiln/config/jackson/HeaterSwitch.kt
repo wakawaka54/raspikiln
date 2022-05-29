@@ -1,4 +1,4 @@
-package org.raspikiln.kiln.jackson
+package org.raspikiln.kiln.config.jackson
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser

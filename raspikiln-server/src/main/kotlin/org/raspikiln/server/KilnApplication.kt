@@ -3,20 +3,20 @@ package org.raspikiln.server
 import mu.KotlinLogging
 import org.raspikiln.http.KilnHttp
 import org.raspikiln.kiln.Kiln
-import org.raspikiln.kiln.config.HttpConfig
-import org.raspikiln.kiln.config.KilnConfigDefinition
+import org.raspikiln.kiln.config.Config
+import org.raspikiln.kiln.config.http.HttpConfig
 
 private val logger = KotlinLogging.logger {  }
 
 class KilnApplication(
-    private val kilnConfigDefinition: KilnConfigDefinition,
+    private val config: Config,
     private val kiln: Kiln
 ) {
 
     fun run() {
         kiln.start()
 
-        with (kilnConfigDefinition) {
+        with (config) {
             http.maybeStartHttp()
         }
     }

@@ -1,16 +1,10 @@
 package org.raspikiln.kiln.common
 
 /**
- * Location on a kiln.
+ * Location in the kiln.
  */
-sealed interface KilnLocation {
-
-    /**
-     * Kiln oven.
-     */
-    object Oven : KilnLocation {
-        override fun name(): String = "oven"
+data class KilnLocation(val name: String) {
+    companion object {
+        val Oven = KilnLocation(name = "oven")
     }
-
-    fun name(): String
 }

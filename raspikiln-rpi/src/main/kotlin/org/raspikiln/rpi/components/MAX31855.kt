@@ -3,10 +3,9 @@ package org.raspikiln.rpi.components
 import at.favre.lib.bytes.Bytes
 import com.pi4j.io.spi.Spi
 import org.raspikiln.core.units.Temperature
-import org.raspikiln.kiln.common.KilnLocation
-import org.raspikiln.kiln.legacysensors.TemperatureMeasurement
-import org.raspikiln.kiln.legacysensors.TemperatureSensor
-import org.raspikiln.kiln.zones.KilnZoneName
+import org.raspikiln.kiln.config.sensors.SensorMeasurementConfig
+import org.raspikiln.kiln.sensors.TemperatureMeasurement
+import org.raspikiln.kiln.sensors.TemperatureSensor
 
 /**
  * Thermocouple interface IC.
@@ -15,38 +14,26 @@ import org.raspikiln.kiln.zones.KilnZoneName
  */
 class MAX31855(
     private val name: String,
-    private val location: KilnLocation,
-    private val zone: KilnZoneName,
-    private val spi: Spi
+    private val spi: Spi,
+    private val provides: List<SensorMeasurementConfig.Temperature>
 ) : TemperatureSensor {
     companion object {
+        const val TYPE = "MAX31855"
+
         private const val DataLengthBytes = 4
+        private const val THERMOCOUPLE_ADDRESS = "thermocouple"
+        private const val JUNCTION_ADDRESS = "junction"
     }
 
     override fun name(): String = name
 
-    override fun location(): KilnLocation = location
-
-    override fun zone(): KilnZoneName = zone
-
-    override fun read(): TemperatureMeasurement {
-        // TODO Check for faults and throw errors.
-
+    override fun temperature(): List<TemperatureMeasurement> {
         val bytes = readBytes()
 
-        val thermocoupleTemperature =
-            Temperature.Celsius(bytes.thermocoupleTemperature())
-
-        val junctionTemperature = Temperature.Celsius(bytes.junctionTemperature())
-
-        // 0 bit sign, 1 - 11 bits temperature . (2 bits
-        /*
-        val temperature = Temperature.Celsius(
-            bits.getMsbInt(0 until 12).toDouble() + bits.getMsbUInt(12 until 14).toDouble() * 0.25
+        return listOfNotNull(
+            maybeMeasurement(THERMOCOUPLE_ADDRESS, bytes.thermocoupleTemperature().celsius()),
+            maybeMeasurement(JUNCTION_ADDRESS, bytes.junctionTemperature().celsius())
         )
-         */
-
-        return TemperatureMeasurement(thermocoupleTemperature)
     }
 
     private fun readBytes() = Bytes.wrap(spi.readNBytes(DataLengthBytes))
@@ -60,4 +47,11 @@ class MAX31855(
             .shiftRight(4)
             .intValueExact()
             .toDouble() * 0.0625
+
+    private fun maybeMeasurement(address: String, temperature: Temperature): TemperatureMeasurement? {
+        val providesConfig = provides.find { it.address == address } ?: return null
+        return TemperatureMeasurement(location = providesConfig.location, temperature = temperature)
+    }
+
+    private fun Double.celsius() = Temperature.Celsius(this)
 }

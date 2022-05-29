@@ -1,9 +1,8 @@
 package org.raspikiln.server
 
 import mu.KotlinLogging
-import org.koin.dsl.module
-import org.raspikiln.kiln.KilnDefinitionProviderRegistration
-import org.raspikiln.mock.MockKilnDefinitionProvider
+import org.raspikiln.kiln.bridge.kilnBridgeProviderRegistry
+import org.raspikiln.mock.MockKilnBridgeProvider
 
 private val logger = KotlinLogging.logger {  }
 
@@ -12,11 +11,11 @@ private val logger = KotlinLogging.logger {  }
  */
 fun main(args: Array<String>) {
     logger.info { "Starting mock server..." }
-    Server(appComponentFactory = AppComponentFactory.koin(mock())).main(args)
+    Server(
+        appComponentFactory = AppComponentFactory.create(
+            bridgeRegistry = kilnBridgeProviderRegistry {
+                +MockKilnBridgeProvider()
+            }
+        )
+    ).main(args)
 }
-
-private fun mock() =
-    KilnDefinitionProviderRegistration(
-        name = "mock",
-        provider = MockKilnDefinitionProvider()
-    )

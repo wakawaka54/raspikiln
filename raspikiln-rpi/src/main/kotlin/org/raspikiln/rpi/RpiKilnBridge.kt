@@ -1,13 +1,11 @@
 package org.raspikiln.rpi
 
 import mu.KotlinLogging
-import org.raspikiln.kiln.KilnBridge
+import org.raspikiln.kiln.bridge.KilnBridge
 import org.raspikiln.kiln.controller.TemperatureController
-import org.raspikiln.kiln.legacysensors.Sensor
-import org.raspikiln.kiln.legacysensors.zones
+import org.raspikiln.kiln.initialization.KilnInitializationBuilder
+import org.raspikiln.kiln.sensors.Sensor
 import org.raspikiln.kiln.switches.Switch
-import org.raspikiln.kiln.switches.zones
-import org.raspikiln.kiln.zones.KilnZoneName
 import org.raspikiln.rpi.core.PiContext
 
 private val logger = KotlinLogging.logger {  }
@@ -15,13 +13,16 @@ private val logger = KotlinLogging.logger {  }
 /**
  * Implements a Kiln which is controlled by a Raspberry Pi.
  */
-class RpiKilnDefinition(
+class RpiKilnBridge(
     private val pi4j: PiContext,
     private val sensors: List<Sensor>,
     private val switches: List<Switch>,
     private val controllers: List<TemperatureController>
 ) : KilnBridge {
-    override fun zones(): Set<KilnZoneName> = sensors.zones() + switches.zones()
+
+    override fun initialize(builder: KilnInitializationBuilder) {
+        sensors().forEach { it.initialize(builder) }
+    }
 
     override fun sensors(): List<Sensor> = sensors
 

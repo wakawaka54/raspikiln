@@ -14,10 +14,9 @@ import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import org.raspikiln.core.registerCoreModule
 import org.raspikiln.http.health.healthApi
-import org.raspikiln.http.kiln.jackson.registerKilnApiModule
 import org.raspikiln.http.kiln.kilnApi
 import org.raspikiln.http.timeseries.timeseriesApi
-import org.raspikiln.kiln.config.HttpConfig
+import org.raspikiln.kiln.config.http.HttpConfig
 import org.slf4j.event.Level
 
 /**
@@ -30,19 +29,20 @@ class KilnHttp(private val application: ApplicationEngine) {
                 install(CallLogging) {
                     level = Level.WARN
                 }
+
                 install(CORS) {
                     allowHeader(HttpHeaders.ContentType)
-
                     anyHost()
                 }
+
                 install(ContentNegotiation) {
                     jackson {
                         registerKotlinModule()
                         registerCoreModule()
-                        registerKilnApiModule()
                         registerModule(JavaTimeModule())
                     }
                 }
+
                 install(StatusPages) {
                     exception { call: ApplicationCall, cause: Throwable ->
                         call.respond(
@@ -55,7 +55,7 @@ class KilnHttp(private val application: ApplicationEngine) {
                 }
 
                 healthApi()
-                kilnApi()
+                kilnApi(config)
                 timeseriesApi()
             }
         )

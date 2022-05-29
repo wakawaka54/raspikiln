@@ -3,8 +3,8 @@ package org.raspikiln.rpi.components
 import com.pi4j.io.gpio.digital.DigitalOutput
 import com.pi4j.io.gpio.digital.DigitalState
 import mu.KotlinLogging
+import org.raspikiln.kiln.common.KilnLocation
 import org.raspikiln.kiln.switches.*
-import org.raspikiln.kiln.zones.KilnZoneName
 import org.raspikiln.rpi.components.DigitalSwitchState.digitalState
 import org.raspikiln.rpi.components.DigitalSwitchState.switchState
 
@@ -15,7 +15,7 @@ private val logger = KotlinLogging.logger { }
  */
 class DigitalSwitch(
     private val name: String,
-    private val zones: Set<KilnZoneName>,
+    private val locations: Set<KilnLocation>,
     private val switchType: SwitchType,
     private val digitalOutput: DigitalOutput
 ) : Switch {
@@ -31,7 +31,7 @@ class DigitalSwitch(
 
     override fun switchType(): SwitchType = switchType
 
-    override fun zones(): Set<KilnZoneName> = zones
+    override fun locations(): Set<KilnLocation> = locations
 
     override fun switchState(): SwitchState = digitalOutput.state().switchState()
 

@@ -10,10 +10,12 @@ import org.raspikiln.kiln.programs.types.ProgramDefinition
 class ProgramFactory {
     fun create(kiln: Kiln, definition: ProgramDefinition): Program =
         when (definition.name) {
+            /**
             ManualProgram.Name -> ManualProgram(
                 kiln = kiln,
                 options = Mapper.jsonMapper().treeToValue(definition.options, ManualProgramOptions::class.java)
             )
+            **/
             else -> error("Unregonized program ${definition.name}")
         }
 }

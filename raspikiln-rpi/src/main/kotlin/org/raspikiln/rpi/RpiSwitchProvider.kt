@@ -24,7 +24,7 @@ class RpiSwitchProvider(private val pi4j: PiContext) {
     private fun HeatingElementSwitchConfig.create() = DigitalSwitch(
         name = name,
         switchType = SwitchType.HeaterSwitch,
-        zones = zones.toSet(),
+        locations = locations.toSet(),
         digitalOutput = pi4j.digitalOutput {
             address(digitalOutput.pin)
         }
@@ -33,7 +33,7 @@ class RpiSwitchProvider(private val pi4j: PiContext) {
     private fun ArmingSwitchConfig.create() = DigitalSwitch(
         name = name,
         switchType = SwitchType.ArmingSwitch,
-        zones = zones.toSet(),
+        locations = locations.toSet(),
         digitalOutput = pi4j.digitalOutput {
             address(digitalOutput.pin)
         }

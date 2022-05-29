@@ -16,7 +16,7 @@ class TemperatureControllerProvider {
 
     private fun ControllerConfig.OnOff.create() =
         OnOffController(
-            zones.toSet(),
+            locations = locations.toSet(),
             OnOffController.Options(
                 hysteresis = hysteresis,
                 dutyCycle = dutyCycle.milliseconds
@@ -25,7 +25,7 @@ class TemperatureControllerProvider {
 
     private fun ControllerConfig.PID.create() =
         PidController(
-            zones.toSet(),
+            locations = locations.toSet(),
             PidController.Options(
                 dutyCycle = dutyCycle.milliseconds,
                 gainTerms = TupleTerms(p = kp, i = ki, d = kd)

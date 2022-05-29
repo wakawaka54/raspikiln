@@ -1,11 +1,11 @@
 package org.raspikiln.simulation
 
 import org.raspikiln.core.units.Temperature
+import org.raspikiln.kiln.common.KilnLocation
 import org.raspikiln.kiln.controller.ControllerInput
 import org.raspikiln.kiln.controller.PidController
 import org.raspikiln.kiln.controller.algorithm.TupleTerms
 import org.raspikiln.kiln.switches.SwitchState
-import org.raspikiln.kiln.zones.KilnZoneNames
 import org.raspikiln.mock.MockTemperatureFormula
 import org.raspikiln.mock.MockTemperatureFormula.Parameters
 import org.raspikiln.mock.RoomTemperature
@@ -27,7 +27,7 @@ class ControlSimulation(options: Options) {
         kilnTemperature = options.kilnTemperature.value
     ))
     private val controller = PidController(
-        zones = setOf(KilnZoneNames.Zone0),
+        locations = setOf(KilnLocation.Oven),
         options = PidController.Options(
             dutyCycle = dutyCycle,
             gainTerms = options.gainTerms

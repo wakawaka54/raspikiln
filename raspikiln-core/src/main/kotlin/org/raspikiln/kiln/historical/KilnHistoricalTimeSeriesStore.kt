@@ -1,15 +1,15 @@
 package org.raspikiln.kiln.historical
 
 import org.raspikiln.kiln.KilnState
-import org.raspikiln.kiln.common.MetricName
-import org.raspikiln.kiln.switches.SwitchState
-import org.raspikiln.kiln.zones.ZoneState
-import org.raspikiln.tsdb.Datapoint
-import org.raspikiln.tsdb.Measurement
-import org.raspikiln.tsdb.MetricIdentifier
 import org.raspikiln.tsdb.TimesSeriesDB
 
 class KilnHistoricalTimeSeriesStore(private val timeSeriesDB: TimesSeriesDB) : KilnHistoricalStore {
+
+    override fun record(state: KilnState) {
+        TODO("Not yet implemented")
+    }
+
+    /**
     override fun record(state: KilnState) {
         with(state) {
             timeSeriesDB.write(
@@ -42,4 +42,5 @@ class KilnHistoricalTimeSeriesStore(private val timeSeriesDB: TimesSeriesDB) : K
             datapoint = Datapoint(value = temperatureSetpoint)
         )
     }
+    **/
 }
