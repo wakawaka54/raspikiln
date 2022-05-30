@@ -20,22 +20,18 @@ kiln:
         - name: "thermocouple-a"
           type: temperature
           address: thermocouple
-          location: oven
           metric: temperature.oven
         - name: "temperature-electronics"
           address: junction
           type: temperature
-          location: electronics
           metric: temperature.electronics
   switches:
     - name: "arming-switch"
       type: "arming-switch"
-      locations: [ oven ]
       digitalOutput:
         pin: 12
     - name: "heater-switch"
       type: "heating-element-switch"
-      locations: [ oven ]
       digitalOutput:
         pin: 22
   controllers:
@@ -44,5 +40,6 @@ kiln:
       kp: 100
       ki: 0
       kd: 0
-      locations: [ oven ]
+      armingSwitch: "arming-switch"
+      heaterSwitch: "heater-switch"
       targetMetric: temperature.target

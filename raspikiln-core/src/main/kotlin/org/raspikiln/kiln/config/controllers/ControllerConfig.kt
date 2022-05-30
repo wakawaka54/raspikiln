@@ -10,12 +10,18 @@ import org.raspikiln.kiln.common.KilnLocation
     property = "type"
 )
 sealed interface ControllerConfig {
+    val armingSwitch: String?
+    val heaterSwitch: String
+    val targetMetric: String
+
     @JsonTypeName("on-off")
     data class OnOff(
         val dutyCycle: Int,
         val hysteresis: Double,
         val locations: List<KilnLocation>,
-        val targetMetric: String
+        override val armingSwitch: String?,
+        override val heaterSwitch: String,
+        override val targetMetric: String
     ) : ControllerConfig
 
     @JsonTypeName("pid")
@@ -24,7 +30,8 @@ sealed interface ControllerConfig {
         val kp: Double,
         val ki: Double,
         val kd: Double,
-        val locations: List<KilnLocation>,
-        val targetMetric: String
+        override val armingSwitch: String?,
+        override val heaterSwitch: String,
+        override val targetMetric: String
     ) : ControllerConfig
 }

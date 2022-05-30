@@ -1,8 +1,7 @@
 package org.raspikiln.server
 
 import mu.KotlinLogging
-import org.raspikiln.kiln.bridge.kilnBridgeProviderRegistry
-import org.raspikiln.rpi.RpiKilnBridgeProvider
+import org.raspikiln.server.core.CoreModule
 import java.lang.Exception
 
 private val logger = KotlinLogging.logger {  }
@@ -13,9 +12,7 @@ private val logger = KotlinLogging.logger {  }
 fun main(args: Array<String>) {
     try {
         Server(
-            appComponentFactory = AppComponentFactory.create(
-                bridgeRegistry = kilnBridgeProviderRegistry { +RpiKilnBridgeProvider() }
-            )
+            app = AppComponent.create(AppModule + RpiModule)
         )
         .main(args)
     } catch (ex: Exception) {

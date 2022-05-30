@@ -1,6 +1,7 @@
 package org.raspikiln.core.services
 
 import com.google.common.util.concurrent.AbstractScheduledService
+import com.google.common.util.concurrent.Service
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import kotlin.time.Duration
@@ -12,17 +13,16 @@ private val logger = KotlinLogging.logger {  }
 /**
  * Creates a scheduled service.
  */
-fun scheduledService(name: String, delay: Duration = 0.seconds, period: Duration, block: suspend () -> Unit) =
-    ScheduledService(name, delay, period, block)
+fun scheduledService(name: String, delay: Duration = 0.seconds, period: Duration, block: suspend () -> Unit): Service =
+    ScheduledServiceSpec(name, delay, period, block)
 
 /**
  * Scheduled service.
  */
-class ScheduledService(
+abstract class ScheduledService(
     private val name: String,
     private val delay: Duration,
-    private val period: Duration,
-    private val fn: suspend () -> Unit
+    private val period: Duration
 ) : AbstractScheduledService() {
 
     override fun serviceName(): String = name
@@ -33,9 +33,20 @@ class ScheduledService(
         logger.info { "Starting service [$name]" }
     }
 
-    override fun runOneIteration() = runBlocking { fn() }
+    override fun runOneIteration() = runBlocking { run() }
 
     override fun shutDown() {
         logger.info { "Stopping service [$name]" }
     }
+
+    protected abstract suspend fun run()
+}
+
+private class ScheduledServiceSpec(
+    name: String,
+    delay: Duration,
+    period: Duration,
+    private val fn: suspend () -> Unit
+) : ScheduledService(name, delay, period) {
+    override suspend fun run() = fn()
 }

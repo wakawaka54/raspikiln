@@ -2,20 +2,31 @@ package org.raspikiln.mock
 
 import org.raspikiln.core.units.Temperature
 import org.raspikiln.kiln.common.KilnLocation
+import org.raspikiln.kiln.config.sensors.SensorMeasurementConfig
 import org.raspikiln.kiln.sensors.TemperatureMeasurement
 import org.raspikiln.kiln.sensors.TemperatureSensor
 
 class MockTemperatureSensor(
     private val kilnState: MockKilnState,
-    private val options: Options = Options()
+    private val provides: List<SensorMeasurementConfig.Temperature>,
+    private val options: Options = Options(),
 ) : TemperatureSensor {
+    companion object {
+        const val TYPE = "mock-temperature"
+        private const val THERMOCOUPLE_ADDRESS = "thermocouple"
+    }
 
     override fun name(): String = "mock-temperature"
 
     override fun temperature(): List<TemperatureMeasurement> =
-        listOf(
-            TemperatureMeasurement(location = KilnLocation.Oven, temperature = kilnState.temperature().withNoise(options.noiseAmount))
+        listOfNotNull(
+            maybeMeasurement(THERMOCOUPLE_ADDRESS) { kilnState.temperature().withNoise(options.noiseAmount) }
         )
+
+    private fun maybeMeasurement(address: String, temperatureFn: () -> Temperature): TemperatureMeasurement? {
+        val providesConfig = provides.find { it.address == address } ?: return null
+        return TemperatureMeasurement(location = providesConfig.location, temperature = temperatureFn())
+    }
 
     private fun Temperature.withNoise(amount: Double) =
         Temperature.Celsius(

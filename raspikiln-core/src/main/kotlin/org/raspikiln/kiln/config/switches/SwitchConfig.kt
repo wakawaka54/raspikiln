@@ -15,14 +15,12 @@ sealed interface SwitchConfig {
     @JsonTypeName("arming-switch")
     data class ArmingSwitchConfig(
         val name: String,
-        val locations: List<KilnLocation>,
         val digitalOutput: SensorProtocolConfig.DigitalOutput
     ) : SwitchConfig
 
     @JsonTypeName("heating-element-switch")
     data class HeatingElementSwitchConfig(
         val name: String,
-        val locations: List<KilnLocation>,
         val digitalOutput: SensorProtocolConfig.DigitalOutput
     ) : SwitchConfig
 }

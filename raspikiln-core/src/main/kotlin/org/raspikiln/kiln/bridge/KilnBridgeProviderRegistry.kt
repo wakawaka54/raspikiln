@@ -1,12 +1,12 @@
 package org.raspikiln.kiln.bridge
 
-fun kilnBridgeProviderRegistry(init: KilnBridgeProviderRegistry.() -> Unit) = KilnBridgeProviderRegistry().apply(init)
-
 /**
  * Registry of kiln bridge providers..
  */
 class KilnBridgeProviderRegistry {
     private val providers = mutableMapOf<String, KilnBridgeProvider>()
+
+    fun registerAll(providers: List<KilnBridgeProvider>) = apply { providers.forEach { register(it) } }
 
     fun register(provider: KilnBridgeProvider) = apply { providers.put(provider.name(), provider) }
 

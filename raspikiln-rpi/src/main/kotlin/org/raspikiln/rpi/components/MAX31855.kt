@@ -50,7 +50,7 @@ class MAX31855(
 
     private fun maybeMeasurement(address: String, temperature: Temperature): TemperatureMeasurement? {
         val providesConfig = provides.find { it.address == address } ?: return null
-        return TemperatureMeasurement(location = providesConfig.location, temperature = temperature)
+        return TemperatureMeasurement(metric = providesConfig.metric, temperature = temperature)
     }
 
     private fun Double.celsius() = Temperature.Celsius(this)

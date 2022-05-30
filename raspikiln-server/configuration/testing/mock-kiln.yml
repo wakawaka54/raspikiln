@@ -8,3 +8,26 @@ http:
         metric: temperature.target
 kiln:
   provider: mock
+  sensors:
+    - type: mock-temperature
+      sampling:
+        window: 2s
+        samples: 20
+      provides:
+        - name: "thermocouple-a"
+          type: temperature
+          address: thermocouple
+          location: oven
+          metric: temperature.oven
+  switches:
+    - name: "heater-switch"
+      type: "heating-element-switch"
+      locations: [ oven ]
+  controllers:
+    - type: "pid"
+      dutyCycle: 2000 # 2 seconds
+      kp: 100
+      ki: 0
+      kd: 0
+      locations: [ oven ]
+      targetMetric: temperature.target

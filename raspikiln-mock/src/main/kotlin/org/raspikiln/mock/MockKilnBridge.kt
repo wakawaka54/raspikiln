@@ -14,13 +14,12 @@ import kotlin.time.Duration.Companion.seconds
 /**
  * Kiln definition that is mocked.
  */
-class MockKilnBridge : KilnBridge {
-    private val mockState = MockKilnState(
-        options = MockKilnState.Options(
-            temperatureFormula = MockTemperatureFormula(MockTemperatureFormula.Parameters())
-        )
-    )
-
+class MockKilnBridge(
+    private val mockState: MockKilnState,
+    private val sensors: List<Sensor>,
+    private val switches: List<Switch>,
+    private val controllers: List<TemperatureController>
+) : KilnBridge {
     private val temperatureSensor = MockTemperatureSensor(mockState)
 
     private val heaterSwitch = MockHeaterSwitch(mockState, setOf(KilnLocation.Oven))

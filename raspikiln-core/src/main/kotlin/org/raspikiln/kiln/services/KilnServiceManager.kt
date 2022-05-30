@@ -5,7 +5,7 @@ import mu.KotlinLogging
 
 private val logger = KotlinLogging.logger { }
 
-class KilnServiceManager(private val registry: KilnServiceRegistry) {
+class KilnServiceManager(registry: KilnServiceRegistry) {
 
     private val manager = ServiceManager(registry.getAll())
 

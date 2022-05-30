@@ -4,13 +4,13 @@ import org.raspikiln.core.units.Temperature
 import org.raspikiln.kiln.common.KilnLocation
 
 data class TemperatureMeasurement(
-    val location: KilnLocation,
+    val metric: String,
     val temperature: Temperature
 ) {
     operator fun plus(another: TemperatureMeasurement): TemperatureMeasurement {
-        require(location == another.location) { "Temperatures cannot be summed across locations [$location] [${another.location}]" }
+        require(metric == another.metric) { "Temperatures cannot be summed across metrics [$metric] [${another.metric}]" }
         return copy(
-            location = location,
+            metric = metric,
             temperature = temperature + another.temperature
         )
     }
@@ -19,7 +19,7 @@ data class TemperatureMeasurement(
 
     operator fun div(amount: Double): TemperatureMeasurement =
         copy(
-            location = location,
+            metric = metric,
             temperature = temperature / amount
         )
 }

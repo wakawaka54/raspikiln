@@ -25,11 +25,6 @@ interface SensorMeasurementConfig {
         val address: String,
 
         /**
-         * Location of the sensor.
-         */
-        val location: KilnLocation,
-
-        /**
          * Metric name of the temperature sensor.
          */
         val metric: String

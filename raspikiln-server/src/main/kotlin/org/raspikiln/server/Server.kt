@@ -9,9 +9,7 @@ import org.raspikiln.server.config.ConfigFileReader
 
 private val logger = KotlinLogging.logger { }
 
-class Server(
-    private val appComponentFactory: AppComponentFactory
-) : CliktCommand(
+class Server(private val app: AppComponent) : CliktCommand(
     name = "raspikiln",
     help = "Launch raspikiln application."
 ) {
@@ -24,10 +22,7 @@ class Server(
         logger.info { "Starting raspikiln..." }
         logger.info { "Kiln definition is\n${configFile.readText()}" }
 
-        appComponentFactory
-            .create(config = configFileReader.read(configFile))
-            .kilnApplication()
-            .run()
+        app.kilnApplication().start(config = configFileReader.read(configFile))
 
         waitUntilStopped()
     }
