@@ -16,8 +16,7 @@ private val logger = KotlinLogging.logger {  }
 class RpiKilnBridge(
     private val pi4j: PiContext,
     private val sensors: List<Sensor>,
-    private val switches: List<Switch>,
-    private val controllers: List<TemperatureController>
+    private val switches: List<Switch>
 ) : KilnBridge {
 
     override fun initialize(builder: KilnInitializationBuilder) {
@@ -27,8 +26,6 @@ class RpiKilnBridge(
     override fun sensors(): List<Sensor> = sensors
 
     override fun switches(): List<Switch> = switches
-
-    override fun controllers(): List<TemperatureController> = controllers
 
     override fun shutdown() {
         logger.info { "Shutting down pi4j." }

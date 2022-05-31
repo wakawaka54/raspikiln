@@ -7,6 +7,9 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.raspikiln.core.jackson.CoreJacksonModule
 import org.raspikiln.kiln.config.jackson.KilnConfigModule
 
+class YamlObjectMapper : ObjectMapper(YAMLFactory())
+class JsonObjectMapper : ObjectMapper()
+
 object Mapper {
     private val jsonMapper = ObjectMapper()
         .registerModules(JavaTimeModule())

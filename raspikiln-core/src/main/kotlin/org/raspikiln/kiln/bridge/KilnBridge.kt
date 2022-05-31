@@ -20,7 +20,12 @@ interface KilnBridge : KilnInitializer {
      * Get switches from the kiln bridge.
      */
     fun switches(): List<Switch>
-    fun controllers(): List<TemperatureController>
+
+    fun findSensor(name: String) = sensors().find { it.name() == name }
+    fun requireSensor(name: String) = requireNotNull(findSensor(name)) { "Could not find required sensor [$name]" }
+
+    fun findSwitch(name: String) = switches().find { it.name() == name }
+    fun requireSwitch(name: String) = requireNotNull(findSwitch(name)) { "Could not find required switch [$name]" }
 
     fun shutdown()
 }

@@ -2,6 +2,7 @@ package org.raspikiln.rpi
 
 import com.pi4j.io.spi.Spi
 import mu.KotlinLogging
+import org.raspikiln.kiln.config.sensors.SensorChipsetConfig
 import org.raspikiln.kiln.config.sensors.SensorProtocolConfig
 import org.raspikiln.kiln.config.sensors.SensorConfig
 import org.raspikiln.kiln.sensors.Sensor
@@ -14,11 +15,11 @@ private val logger = KotlinLogging.logger { }
 class RpiSensorProvider(private val pi4J: PiContext) {
 
     fun create(sensor: SensorConfig): Sensor =
-        when (sensor.type) {
-            MAX31855.TYPE -> MAX31855(
-                sensor.name, sensor.requireSpi().bind(sensor.name), provides = sensor.requireProvidesAs()
+        when (val chipset = sensor.chipset) {
+            is SensorChipsetConfig.MAX31855 -> MAX31855(
+                sensor.name, chipset.spi.bind(sensor.name), provides = sensor.requireProvidesAs()
             ).print()
-            else -> error("Unrecognized sensor type ${sensor.type}")
+            else -> error("Unrecognized sensor type ${sensor.chipset}")
         }
 
     private fun SensorProtocolConfig.Spi.bind(name: String) =

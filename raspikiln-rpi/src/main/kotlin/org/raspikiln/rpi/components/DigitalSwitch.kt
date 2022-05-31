@@ -15,8 +15,8 @@ private val logger = KotlinLogging.logger { }
  */
 class DigitalSwitch(
     private val name: String,
-    private val locations: Set<KilnLocation>,
     private val switchType: SwitchType,
+    private val metric: String,
     private val digitalOutput: DigitalOutput
 ) : Switch {
 
@@ -31,13 +31,15 @@ class DigitalSwitch(
 
     override fun switchType(): SwitchType = switchType
 
-    override fun locations(): Set<KilnLocation> = locations
-
     override fun switchState(): SwitchState = digitalOutput.state().switchState()
 
     override fun toggle(state: SwitchState) {
         digitalOutput.state(state.digitalState())
     }
+
+    override fun measurements(): List<SwitchMeasurement> = listOf(
+        SwitchMeasurement(metric = metric, state = switchState())
+    )
 }
 
 

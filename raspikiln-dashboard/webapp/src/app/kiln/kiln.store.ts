@@ -115,7 +115,6 @@ export class KilnStore {
     const state = ctx.getState();
     return ctx.setState({
       ...state,
-      zones: config.zones,
       dashboard: {
         targetMetrics: config.chart.targetMetrics,
         temperatureMetrics: config.chart.temperatureMetrics

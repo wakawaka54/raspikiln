@@ -16,7 +16,7 @@ class Server(private val app: AppComponent) : CliktCommand(
 
     private val configFile by option("--config", "-c").file(mustExist = true, mustBeReadable = true).required()
 
-    private val configFileReader = ConfigFileReader()
+    private val configFileReader = app.configFileReader()
 
     override fun run() {
         logger.info { "Starting raspikiln..." }

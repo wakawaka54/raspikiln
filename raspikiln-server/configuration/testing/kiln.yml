@@ -12,7 +12,7 @@ kiln:
   sensors:
     - type: MAX31855
       sampling:
-        window: 2s
+        window: PT2S
         samples: 20
       spi:
         address: 0
@@ -27,11 +27,13 @@ kiln:
           metric: temperature.electronics
   switches:
     - name: "arming-switch"
-      type: "arming-switch"
+      type: "digital-switch"
+      metric: switch.arming-switch
       digitalOutput:
         pin: 12
     - name: "heater-switch"
-      type: "heating-element-switch"
+      type: "digital-switch"
+      metric: switch.heater-switch
       digitalOutput:
         pin: 22
   controllers:

@@ -16,6 +16,7 @@ import org.raspikiln.core.registerCoreModule
 import org.raspikiln.http.health.healthApi
 import org.raspikiln.http.kiln.kilnApi
 import org.raspikiln.http.timeseries.timeseriesApi
+import org.raspikiln.kiln.Kiln
 import org.raspikiln.kiln.config.http.HttpConfig
 import org.slf4j.event.Level
 
@@ -24,7 +25,7 @@ import org.slf4j.event.Level
  */
 class KilnHttp(private val application: ApplicationEngine) {
     companion object {
-        fun create(config: HttpConfig) = KilnHttp(
+        fun create(config: HttpConfig, kiln: Kiln) = KilnHttp(
             embeddedServer(Netty, port = config.port) {
                 install(CallLogging) {
                     level = Level.WARN
@@ -55,7 +56,7 @@ class KilnHttp(private val application: ApplicationEngine) {
                 }
 
                 healthApi()
-                kilnApi(config)
+                kilnApi(kiln, config)
                 timeseriesApi()
             }
         )

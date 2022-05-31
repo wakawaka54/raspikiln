@@ -9,7 +9,7 @@ import org.raspikiln.kiln.common.KilnLocation
     include = JsonTypeInfo.As.PROPERTY,
     property = "type"
 )
-interface SensorMeasurementConfig {
+sealed interface SensorMeasurementConfig {
 
     @JsonTypeName("temperature")
     data class Temperature(
@@ -28,5 +28,5 @@ interface SensorMeasurementConfig {
          * Metric name of the temperature sensor.
          */
         val metric: String
-    )
+    ) : SensorMeasurementConfig
 }

@@ -5,7 +5,7 @@ package org.raspikiln.kiln.programs
  */
 interface Program {
     fun name(): String
-    fun start(): Program
-    fun evaluate(): Program
-    fun end(): Program
+    fun start()
+    fun evaluate()
+    fun end()
 }

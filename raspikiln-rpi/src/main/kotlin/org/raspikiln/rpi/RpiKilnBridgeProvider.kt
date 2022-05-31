@@ -19,8 +19,7 @@ class RpiKilnBridgeProvider(
             RpiKilnBridge(
                 pi4j = this,
                 sensors = createSensors(config),
-                switches = createSwitches(config),
-                controllers = emptyList()
+                switches = createSwitches(config)
             )
             .bindShutdown()
         }

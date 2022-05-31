@@ -18,8 +18,6 @@ class MAX31855(
     private val provides: List<SensorMeasurementConfig.Temperature>
 ) : TemperatureSensor {
     companion object {
-        const val TYPE = "MAX31855"
-
         private const val DataLengthBytes = 4
         private const val THERMOCOUPLE_ADDRESS = "thermocouple"
         private const val JUNCTION_ADDRESS = "junction"

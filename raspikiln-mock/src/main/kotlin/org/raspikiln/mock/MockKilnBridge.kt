@@ -17,13 +17,13 @@ import kotlin.time.Duration.Companion.seconds
 class MockKilnBridge(
     private val mockState: MockKilnState,
     private val sensors: List<Sensor>,
-    private val switches: List<Switch>,
-    private val controllers: List<TemperatureController>
+    private val switches: List<Switch>
 ) : KilnBridge {
-    private val temperatureSensor = MockTemperatureSensor(mockState)
+    // private val temperatureSensor = MockTemperatureSensor(mockState, )
 
-    private val heaterSwitch = MockHeaterSwitch(mockState, setOf(KilnLocation.Oven))
+//    private val heaterSwitch = MockHeaterSwitch(mockState, setOf(KilnLocation.Oven))
 
+  /**
     private val temperatureController = PidController(
         locations = setOf(KilnLocation.Oven),
         options = PidController.Options(
@@ -35,6 +35,7 @@ class MockKilnBridge(
             )
         )
     )
+**/
 
     init {
         // MockFormulaUpdateJob(mockState).onGlobal()
@@ -46,11 +47,9 @@ class MockKilnBridge(
         )
     }
 
-    override fun sensors(): List<Sensor> = listOf(temperatureSensor)
+    override fun sensors(): List<Sensor> = sensors
 
-    override fun switches(): List<Switch> = listOf(heaterSwitch)
-
-    override fun controllers(): List<TemperatureController> = listOf(temperatureController)
+    override fun switches(): List<Switch> = switches
 
     override fun shutdown() {
 

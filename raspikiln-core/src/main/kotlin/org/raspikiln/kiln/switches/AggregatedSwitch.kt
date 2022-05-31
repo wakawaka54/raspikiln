@@ -23,11 +23,11 @@ private class AggregatedSwitch(private val switches: List<Switch>) : Switch {
 
     override fun switchType(): SwitchType = switches.requiredAll { it.switchType() }
 
-    override fun locations(): Set<KilnLocation> = switches.intersectAll { it.locations() }
-
     override fun switchState(): SwitchState = switches.requiredAll { it.switchState() }
 
     override fun toggle(state: SwitchState) {
         switches.forEach { it.toggle(state) }
     }
+
+    override fun measurements(): List<SwitchMeasurement> = switches.flatMap { it.measurements() }
 }

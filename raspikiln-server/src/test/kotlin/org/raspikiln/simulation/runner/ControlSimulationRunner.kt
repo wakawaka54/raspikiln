@@ -11,6 +11,7 @@ class ControlSimulationRunner(
     private val resultDirectory: File
 ) {
     fun run(input: SimulationRunnerOptions): SimulationResults {
+        /**
         val simulation = ControlSimulation(
             ControlSimulation.Options(
                 startTime = Instant.parse("2022-01-01T00:00:00Z"),
@@ -32,8 +33,12 @@ class ControlSimulationRunner(
                 )
             )
         }
+        **/
+
+        return SimulationResults(resultDirectory)
     }
 
+    /**
     private fun ControlSimulation.simulate(
         step: SimulationRunnerOptions.StepOptions
     ): List<SimulationStep> {
@@ -47,6 +52,8 @@ class ControlSimulationRunner(
             setpoint = state().setpoint?.celsius()?.value ?: 0.0,
             temperature = state().temperature.celsius().value
         )
+
+    **/
 }
 
 private fun <T> List<T>.sparse(size: Int): List<T> {

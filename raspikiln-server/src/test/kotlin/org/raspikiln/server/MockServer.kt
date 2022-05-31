@@ -3,9 +3,7 @@ package org.raspikiln.server
 import mu.KotlinLogging
 import org.koin.dsl.module
 import org.raspikiln.kiln.bridge.KilnBridgeProvider
-import org.raspikiln.kiln.bridge.kilnBridgeProviderRegistry
 import org.raspikiln.mock.MockKilnBridgeProvider
-import org.raspikiln.server.core.CoreModule
 
 private val logger = KotlinLogging.logger {  }
 

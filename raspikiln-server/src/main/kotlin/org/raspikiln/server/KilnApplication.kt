@@ -17,16 +17,14 @@ class KilnApplication(
 
         kiln.start()
 
-        with (config) {
-            http.maybeStartHttp()
+        if (config.http.enabled) {
+            startHttp(kiln, config)
         }
     }
 
-    private fun HttpConfig.maybeStartHttp() {
-        if (!enabled) { return }
-
-        logger.info { "Starting HTTP API on $port" }
-
-        KilnHttp.create(this).start()
+    private fun startHttp(kiln: Kiln, config: Config) {
+        val http = config.http
+        logger.info { "Starting HTTP API on ${http.port}" }
+        KilnHttp.create(http, kiln).start()
     }
 }

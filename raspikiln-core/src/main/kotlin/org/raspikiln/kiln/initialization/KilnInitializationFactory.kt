@@ -1,11 +1,13 @@
 package org.raspikiln.kiln.initialization
 
-class KilnInitializationFactory {
-    fun create(vararg initializers: KilnInitializer): KilnInitialization {
-        val builder = KilnInitializationBuilder()
+import org.raspikiln.kiln.metrics.KilnMetricsRegistry
 
-        initializers.forEach { it.initialize(builder) }
+class KilnInitializationFactory(private val metrics: KilnMetricsRegistry) {
 
-        return builder.build()
-    }
+    fun initialize(init: KilnInitializationBuilder.() -> Unit) =
+        KilnInitializationBuilder(metrics).apply(init).build()
+}
+
+fun KilnInitializationBuilder.initialize(vararg initializers: KilnInitializer) = apply {
+    initializers.forEach { it.initialize(this) }
 }

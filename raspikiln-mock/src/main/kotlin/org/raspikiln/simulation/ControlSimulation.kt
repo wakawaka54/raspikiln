@@ -17,7 +17,8 @@ import kotlin.time.Duration.Companion.seconds
 /**
  * Creates a control simulation.
  */
-class ControlSimulation(options: Options) {
+class ControlSimulation() {
+    /**
     val startTime = options.startTime
     val gainTerms = options.gainTerms
 
@@ -27,11 +28,8 @@ class ControlSimulation(options: Options) {
         kilnTemperature = options.kilnTemperature.value
     ))
     private val controller = PidController(
-        locations = setOf(KilnLocation.Oven),
-        options = PidController.Options(
-            dutyCycle = dutyCycle,
-            gainTerms = options.gainTerms
-        )
+        dutyCycle = dutyCycle,
+        gainTerms = options.gainTerms
     )
 
     private var currentTime = options.startTime
@@ -112,6 +110,8 @@ class ControlSimulation(options: Options) {
         val gainTerms: TupleTerms,
         val setpoint: Temperature? = null
     )
+
+    **/
 }
 
 data class SimulationState(

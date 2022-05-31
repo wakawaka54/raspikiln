@@ -7,17 +7,16 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 import org.raspikiln.http.core.controllers.controller
 import org.raspikiln.http.kiln.config.KilnConfigController
+import org.raspikiln.http.kiln.state.KilnStateController
 import org.raspikiln.kiln.Kiln
 import org.raspikiln.kiln.config.Config
 import org.raspikiln.kiln.config.http.HttpConfig
 
-fun Application.kilnApi(config: HttpConfig) {
-    val kiln: Kiln by inject()
-
+fun Application.kilnApi(kiln: Kiln, config: HttpConfig) {
     routing {
         route("/v1/kiln") {
             programs(kiln)
-            currentState(kiln)
+            state(kiln, config)
             dashboardConfig(config)
         }
     }
@@ -35,10 +34,8 @@ private fun Route.programs(kiln: Kiln) = route("programs") {
     }
 }
 
-private fun Route.currentState(kiln: Kiln) = route("current") {
-    get("state") {
-        call.respond(kiln.state())
-    }
+private fun Route.state(kiln: Kiln, config: HttpConfig) {
+    controller { KilnStateController(config.dashboard, kiln) }
 }
 
 private fun Route.dashboardConfig(config: HttpConfig) = route("config") {

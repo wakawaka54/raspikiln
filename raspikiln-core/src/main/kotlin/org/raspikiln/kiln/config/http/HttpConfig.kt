@@ -14,5 +14,5 @@ data class HttpConfig(
     /**
      * Dashboard configuration.
      */
-    val dashboard: DashboardConfig
+    val dashboard: DashboardConfig,
 )

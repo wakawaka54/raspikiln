@@ -36,11 +36,30 @@ export interface MetricQuerySeries {
 }
 
 export interface KilnDashboardConfig {
-  zones: string[];
+  programs: {
+    manual: ManualProgramConfig;
+    automatic: AutomaticProgramConfig[];
+  },
   chart: {
     temperatureMetrics: MetricInfo[];
     targetMetrics: MetricInfo[];
   }
+}
+
+export interface ManualProgramConfig {
+  name: string;
+  controllers: string[];
+}
+
+export interface AutomaticProgramConfig {
+  name: string;
+  steps: AutomaticProgramStep[];
+}
+
+export interface AutomaticProgramStep {
+  temperature: number;
+  ramp: number;
+  controller: string;
 }
 
 export interface MetricInfo {

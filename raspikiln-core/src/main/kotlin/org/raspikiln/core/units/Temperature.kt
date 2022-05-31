@@ -4,9 +4,10 @@ sealed class Temperature(
     val unit: String,
     open val value: Double
 ) {
-    data class Fahrenheit(override val value: Double) : Temperature(unit = UnitName, value = value) {
+    data class Fahrenheit(override val value: Double) : Temperature(unit = LongName, value = value) {
         companion object {
-            const val UnitName = "fahrenheit"
+            const val LongName = "fahrenheit"
+            const val ShortName = "F"
             val Zero = Fahrenheit(0.0)
         }
 
@@ -17,9 +18,10 @@ sealed class Temperature(
         override fun toString(): String = "${value}F"
     }
 
-    data class Celsius(override val value: Double) : Temperature(unit = UnitName, value = value) {
+    data class Celsius(override val value: Double) : Temperature(unit = LongName, value = value) {
         companion object {
-            const val UnitName = "celsius"
+            const val LongName = "celsius"
+            const val ShortName = "C"
             val Zero = Celsius(0.0)
         }
 

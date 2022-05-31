@@ -1,7 +1,5 @@
 package org.raspikiln.kiln.switches
 
-import org.raspikiln.kiln.common.KilnLocation
-
 /**
  * Defines a switch kiln component.
  */
@@ -10,10 +8,11 @@ interface Switch {
     fun switchType(): SwitchType
     fun switchState(): SwitchState
     fun toggle(state: SwitchState)
-    fun locations(): Set<KilnLocation>
 
     fun on() = toggle(SwitchState.On)
     fun off() = toggle(SwitchState.Off)
+
+    fun measurements(): List<SwitchMeasurement>
 }
 
 enum class SwitchType {
@@ -21,11 +20,12 @@ enum class SwitchType {
     HeaterSwitch
 }
 
-sealed class SwitchState(private val name: String) {
-    object On : SwitchState(name = "on")
-    object Off : SwitchState(name = "off")
+sealed class SwitchState(private val name: String, private val numeric: Int) {
+    object On : SwitchState(name = "on", numeric = 1)
+    object Off : SwitchState(name = "off", numeric = 0)
 
     fun name(): String = name
+    fun numeric(): Int = numeric
 }
 
 fun Collection<SwitchState>.anyOn() = firstOrNull { it == SwitchState.On }

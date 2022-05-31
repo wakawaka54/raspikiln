@@ -25,7 +25,7 @@ class MockTemperatureSensor(
 
     private fun maybeMeasurement(address: String, temperatureFn: () -> Temperature): TemperatureMeasurement? {
         val providesConfig = provides.find { it.address == address } ?: return null
-        return TemperatureMeasurement(location = providesConfig.location, temperature = temperatureFn())
+        return TemperatureMeasurement(metric = providesConfig.metric, temperature = temperatureFn())
     }
 
     private fun Temperature.withNoise(amount: Double) =

@@ -1,17 +1,23 @@
 package org.raspikiln.kiln.controller
 
-import org.raspikiln.kiln.common.KilnLocation
+import org.raspikiln.kiln.initialization.KilnInitializationBuilder
+import org.raspikiln.kiln.switches.Switch
 import org.raspikiln.kiln.switches.SwitchState
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
+/**
 class OnOffController(
-    private val locations: Set<KilnLocation>,
-    private val options: Options
+    override val name: String,
+    override val armingSwitch: Switch?,
+    override val heaterSwitch: Switch,
+    private val options: Options,
 ) : TemperatureController {
     override fun name(): String = "OnOff"
 
-    override fun locations(): Set<KilnLocation> = locations
+    override fun initialize(builder: KilnInitializationBuilder) {
+        TODO("Not yet implemented")
+    }
 
     override fun dutyCycle(): Duration = options.dutyCycle
 
@@ -42,8 +48,9 @@ class OnOffController(
         when (heaterState) {
             SwitchState.On -> heaterOn()
             SwitchState.Off -> heaterOff()
-
         }
+
+
     private fun ControllerInput.setpointOff() = setpoint
 
     private fun ControllerInput.setpointOn() = setpoint.percentage(1.0 - options.hysteresis)
@@ -62,3 +69,4 @@ class OnOffController(
         val dutyCycle: Duration
     )
 }
+    **/

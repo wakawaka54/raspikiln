@@ -11,7 +11,6 @@ import org.raspikiln.core.files.makeDirectories
 import org.raspikiln.core.files.makeParentDirectories
 import org.raspikiln.core.units.Temperature
 import org.raspikiln.kiln.controller.algorithm.TupleTerms
-import org.raspikiln.simulation.ControlSimulation.Options
 import org.raspikiln.simulation.plotly.plotly
 import org.raspikiln.simulation.runner.ControlSimulationRunner
 import org.raspikiln.simulation.runner.SimulationRunnerOptions

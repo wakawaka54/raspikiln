@@ -3,8 +3,11 @@ package org.raspikiln.mock
 import org.raspikiln.kiln.bridge.KilnBridge
 import org.raspikiln.kiln.bridge.KilnBridgeProvider
 import org.raspikiln.kiln.config.KilnConfig
+import org.raspikiln.kiln.config.sensors.SensorChipsetConfig
 import org.raspikiln.kiln.config.sensors.SensorConfig
+import org.raspikiln.kiln.config.switches.SwitchConfig
 import org.raspikiln.kiln.sensors.Sensor
+import org.raspikiln.kiln.switches.Switch
 
 class MockKilnBridgeProvider : KilnBridgeProvider {
     private val mockState = MockKilnState(
@@ -16,16 +19,23 @@ class MockKilnBridgeProvider : KilnBridgeProvider {
     override fun name(): String = "mock"
     override fun create(config: KilnConfig): KilnBridge = MockKilnBridge(
         mockState = mockState,
-        sensors = config.sensors.map { it.createSensor() }
+        sensors = config.sensors.map { it.createSensor() },
+        switches = config.switches.map { it.createSwitch() }
     )
 
     private fun SensorConfig.createSensor(): Sensor =
-        when (type) {
-            MockTemperatureSensor.TYPE -> MockTemperatureSensor(
+        when (chipset) {
+            is SensorChipsetConfig.Mock -> MockTemperatureSensor(
                 kilnState = mockState,
                 provides = requireProvidesAs(),
                 options = MockTemperatureSensor.Options(noiseAmount = 1.0)
             )
             else -> error("Could not create sensor of type [$type]")
+        }
+
+    private fun SwitchConfig.createSwitch(): Switch =
+        when (this) {
+            is SwitchConfig.DigitalSwitch ->
+                MockHeaterSwitch(name = name, metric = metric, kilnState = mockState)
         }
 }
